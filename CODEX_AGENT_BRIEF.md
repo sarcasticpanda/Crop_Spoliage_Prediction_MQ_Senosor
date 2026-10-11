@@ -1,0 +1,56 @@
+# Paste this into the IDE coding agent
+
+You are helping build a research prototype for **stored-crop quality and remaining shelf-life prediction**. Read the attached `five_crop_120000_simulated_training_bundle.zip` before writing code. It contains the complete 120,000-row CSV, a summary workbook, `READ_ME_FIRST.md`, `summary.json`, and a seeded JavaScript generator. Work in my IDE project and show me the commands you run and the files you change.
+
+## 1. Project goal
+
+We want to combine two streams measured from the **same crop lot at matching times**:
+
+1. An AeroSense environment device with `Date`, `Time`, `Temperature(°C)`, `Humidity(%)`, `Pressure(hPa)`, `AQI`, `Gas (kOhms)`, `Altitude(m)`, `DewPoint(°C)`, and `HeatIndex(°C)`. Use the device's supplied values; do not make recalculating AQI a prerequisite.
+2. A Smart Nose array with MQ2, MQ3, MQ4, MQ5, MQ6, MQ7, MQ8, MQ9 and MQ135. Use the same nine channels for every crop initially; compare each channel's value later. Raw responses are cross-sensitive sensor readings, not nine exact gas concentrations.
+
+Current five crops: wheat, maize, table potato, cured dry onion, and spinach. The setting is **post-harvest storage**, including bins/crates/warehouse lots, not crop growth in a field. We eventually want to estimate (a) acceptable/warning/spoiled status now, (b) risk of crossing a quality threshold within a chosen horizon, and (c) time remaining before crossing it. We also want to explore temperature/humidity paths, such as changing temperature from 25°C to 20°C today, but only real interventions can validate the number of days gained.
+
+## 2. Honest state of the data
+
+The attached 120,000-row CSV is **100% simulated**. Every row says `data_origin=SIMULATED_ALL`. It has 500 simulated starting lots (100 per crop); each lot is copied into six storage paths and sampled 40 times. Thus 120,000 rows are only 500 independent *simulated* starting lots and 3,000 simulated trajectories. Its year-2030 timestamps are fictional. The nine MQ numbers are dimensionless response indices, not measured voltage, Rs/R0, or gas ppm. Its quality inspection and thresholds are hypothetical. Read `READ_ME_FIRST.md` for the schema and simulation rules.
+
+There is also a separate real AeroSense workbook supplied by my faculty (`AeroSense Device 2(1).xlsx`). It has 19,896 readings of the ten environment fields, scattered across sessions; 104 rows have `N/A` date/time. It has **no crop or lot IDs, nine-channel MQ data, or quality outcomes**. Do not join its rows to the simulated CSV or to public MQ files as though they were measured from the same lot. Keep it as a separate ingestion and data-quality exercise. No real paired five-crop training dataset has been verified yet.
+
+The eventual real label must come from an independent crop inspection, not from a threshold on an MQ feature. Record a lot-specific inspection and the first interval in which the chosen unacceptable-quality rule was met. An unfailed lot at the end of monitoring is censored; its future failure day is unknown. Grain moisture is an extra real measurement we should seek for wheat and maize.
+
+## 3. Build this code in stages
+
+First inspect the ZIP/CSV and README and print its actual shape, per-crop counts, unique lot/trajectory counts, status counts, time ranges, and missingness. Confirm `summary.json`. Do not assume that each row is an independent experimental sample.
+
+Create a reproducible Python project with a small CLI or clearly documented commands. Separate these modules or equivalent functions:
+
+- `load_simulated`: read the large CSV with appropriate dtypes, preserve a raw copy, validate unique (`sim_trajectory_id`, `storage_age_days`) keys and time order. Treat blanks as missing, especially grain moisture for vegetables and survival endpoints for unfinished lots.
+- `load_aerosense_real`: read the Excel workbook independently if it is present, parse dates/times, report or quarantine the `N/A` timestamps, identify recording sessions and gaps, and **do not** invent lot IDs, MQ values or spoiled labels for it.
+- `make_features`: create environment-only, MQ-only and fused feature sets using current and past information. Begin with crop, storage age, current temperature/RH and other available device fields, grain moisture when available, initial condition if it would be available in real deployment, past environmental summaries, and the nine MQ channels. Handle missing features inside training folds. Do not silently use synthetic MQ index scale as if it were measured raw hardware scale.
+- `split_by_lot`: hold out complete `sim_lot_id` groups. Keep every reading and all six paths of one starting lot on the same side. Use grouped validation within the training set. Do not make a random row split.
+- `train_status`: fit a Random Forest baseline and an XGBoost gradient-boosted classifier (or a documented available gradient-boosting equivalent) for `status_SIM`. Compare environment-only, MQ-only and fused inputs using the **same held-out lot groups**. Use macro F1, per-crop and per-class precision/recall, confusion matrices, and probability calibration or log loss; include a majority-class baseline. Report sample counts by independent lot.
+- `train_survival`: after the classifier works, implement an interval/right-censoring-aware survival baseline, preferably XGBoost AFT if installed. Follow the README's event intervals. Exclude observations after first failure. For a censored observation, follow-up is the remaining observed study period; do not replace an unknown failure day with the final observation day or simply discard every censored lot. If implementation needs a different formulation, document the target construction and evaluation before coding it.
+- `predict`: provide a worked example for a held-out simulated lot, clearly marked `SIMULATION ONLY`. Show status probabilities and, when implemented responsibly, a time-to-event estimate with its limitations. A what-if temperature path must propagate a future environment history; do not hold a future MQ signal equal to today's measured MQ value and present the result as a causal gain.
+
+**Feature leakage ban:** `status_SIM` is the classification target. Never pass it or `inspection_defect_pct_SIM`, `inspection_defect_type_SIM`, `failure_interval_start_days_SIM`, `failure_interval_end_days_SIM`, `event_observed_SIM`, `observed_followup_days_SIM`, `remaining_days_to_first_failed_check_SIM`, or `post_failure_SIM` as prediction features. Do not use `scenario_SIM`, trajectory IDs, lot IDs, fictional absolute dates or future sensor readings as model features. A history feature at time *t* must use readings at or before *t* only. `initial_inspection_defect_pct_SIM` is allowed only as an explicitly reported baseline-quality input that would also be collected in practice; compare performance with and without it.
+
+Keep a model comparison table and record the package versions, random seed, group splits, metrics, plots, and run commands. Write a concise README explaining the outputs. Add a few meaningful checks for key uniqueness, grouping isolation, absence of leakage columns and censored target handling. Do not add a CNN/GNN merely because it sounds advanced; the first question is whether fused tabular features beat the two individual streams. Later sequence models and sensor/zone graphs can be compared after enough **real independent lot histories** exist.
+
+## 4. Interpretation to report back to me
+
+Any score from the attached CSV measures how well a model reconstructs the simulator's assumptions. The MQ values and inspection targets both relate to a hypothetical hidden condition. A high score **does not** show real shelf-life accuracy or prove that a temperature intervention extends life by a specific number of days. Explain this prominently in the report and model output. The real validation milestone is simultaneous AeroSense + MQ measurements from identified crop lots with independent quality inspections, followed by evaluation on new lots.
+
+## 5. Real public datasets to examine as separate experiments
+
+Do not merge unrelated public records by row/date. Before downloading or training, inspect each source's actual files, IDs, targets, units, sampling protocol, and permission. Keep separate experiments with distinct metrics and conclusions:
+
+1. **Tomato paired study** — https://zenodo.org/records/15469472 . The small `Sensor and Laboratory Data.zip` contains a random-sampling CSV and a continuous-sampling CSV, with tomato sample metadata, storage condition/day, weight, colour and 12 gas-sensor Rs/R0 readings. It is the closest public *crop* example for fusion and temperature comparison. The publication mostly classifies storage day/scenario; inspect its files before asserting a measured unacceptable-quality endpoint or exact days remaining. Its sensor types are not automatically the nine MQ array.
+2. **Nine-MQ food freshness archive** — https://zenodo.org/records/17285312 . MQ2/3/4/5/6/7/8/9/135, about three-minute recordings at roughly room temperature, repeated by day. The archive has Tomato D1–D5 and other fruit files, but no wheat, maize, potato, dry onion or spinach files in the verified listing. Use for nine-channel preprocessing and exploratory tomato day classification. D5 is not a verified spoilage day; no varied storage-temperature experiment is established there.
+3. **Potato storage intervention archive** — https://data.mendeley.com/datasets/sbwxmtpj47/1 . Seventeen raw IoT workbooks and a merged workbook with temperature, RH, tuber core temperature and CO2 across several storage modes; a separate figures workbook includes quality/weight-loss results. Use for environmental history and study design. Verify whether lot-level quality records can actually be linked to sensor timestamps before any supervised failure-time training. It contains no verified nine-MQ array.
+4. **Real paired sensor/quality software benchmark on a different food** — https://data.mendeley.com/datasets/n8mc3nspfn/1 . Beef has eight MQ channels, temperature/RH, and TVC-derived quality classes. Useful for checking how software handles actual paired readings and labels, but **do not transfer its trained spoilage model or thresholds to crops**.
+5. **Tomato plus MQ4 and visual classes** — https://doi.org/10.6084/m9.figshare.30783827 . Images and one MQ4 methane channel with spoiled/not-spoiled groups; ambient temperature and RH were not continuously logged. It may support a tomato-quality experiment, not a nine-MQ + environment replacement. The image archive is very large; inspect its sensor files and matching IDs first.
+
+If a dataset has a `Good/Bad` label for **storage conditions** rather than observed food condition, never silently rename it to spoiled/not spoiled. If no verified public data gives all five crops, both devices, and observed failure times, state that gap clearly. Suggest a small paired real pilot for spinach/potato first and longer monitoring for grains.
+
+Start by showing me the inspected CSV schema and a concise implementation plan, then implement the stages above in the project. Do not stop after proposing a plan; leave runnable code and a reported grouped test result for the simulated dataset.

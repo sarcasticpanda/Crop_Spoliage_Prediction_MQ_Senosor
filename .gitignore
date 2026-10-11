@@ -1,0 +1,6 @@
+.venv/
+artifacts/
+artifacts_with_initial/
+.review_data/
+__pycache__/
+*.py[cod]
