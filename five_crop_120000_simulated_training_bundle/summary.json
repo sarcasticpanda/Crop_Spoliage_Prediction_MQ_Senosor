@@ -1,0 +1,25 @@
+{
+  "seed": 20261012,
+  "rows": 120000,
+  "lots": 500,
+  "trajectories": 3000,
+  "per_crop": {
+    "wheat": 24000,
+    "maize": 24000,
+    "potato": 24000,
+    "onion": 24000,
+    "spinach": 24000
+  },
+  "failures": {
+    "wheat": 323,
+    "maize": 404,
+    "potato": 400,
+    "onion": 350,
+    "spinach": 538
+  },
+  "statuses": {
+    "acceptable": 37884,
+    "warning": 44199,
+    "spoiled": 37917
+  }
+}
