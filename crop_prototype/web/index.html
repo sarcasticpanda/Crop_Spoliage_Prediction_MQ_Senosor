@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Local sensor reading checks and simulator model evaluation for stored crops.">
+  <title>Stored crop | Reading desk</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%231d392d'/%3E%3Cpath d='M20 30V9m0 10c-7 0-10-4-10-9 7 0 10 3 10 9Zm0 5c7 0 10-4 10-9-7 0-10 3-10 9Z' fill='none' stroke='%23d8e6b8' stroke-width='2'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f5f4ed;
+      --surface: #fffefa;
+      --ink: #1d2923;
+      --muted: #637169;
+      --line: #dce2d9;
+      --forest: #1d392d;
+      --forest-soft: #284d3c;
+      --lime: #d8e6b8;
+      --alert: #a65738;
+      --warn-bg: #f4e6db;
+      --ok-bg: #e5eddb;
+      --shadow: 0 18px 50px rgba(37, 56, 44, .08);
+      font-family: "Satoshi", "Aptos", "Segoe UI", sans-serif;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--paper); }
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; }
+    :focus-visible { outline: 3px solid #b38237; outline-offset: 3px; }
+    .skip { position: absolute; left: -999px; top: 8px; z-index: 20; background: white; padding: 12px; }
+    .skip:focus { left: 8px; }
+    .topbar { height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(20px, 5vw, 74px); border-bottom: 1px solid rgba(29,57,45,.11); background: rgba(255,254,250,.86); position: sticky; top: 0; z-index: 10; backdrop-filter: blur(14px); }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 650; letter-spacing: -.02em; }
+    .brand-mark { width: 34px; height: 34px; border-radius: 10px; background: var(--forest); display: grid; place-items: center; color: var(--lime); font-family: Georgia, serif; font-size: 21px; }
+    .nav { display: flex; align-items: center; gap: 8px; }
+    .nav button { border: 0; background: transparent; padding: 10px 13px; border-radius: 8px; cursor: pointer; color: var(--muted); transition: .2s ease; }
+    .nav button:hover, .nav button[aria-current="page"] { color: var(--forest); background: #e8ece3; }
+    .connection { display: flex; align-items: center; gap: 9px; color: var(--muted); font-size: 13px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #567d59; box-shadow: 0 0 0 4px rgba(86,125,89,.13); }
+    main { width: 100%; max-width: 100%; overflow-x: hidden; }
+    .hero { padding: 62px clamp(20px, 5vw, 74px) 33px; background: radial-gradient(ellipse at 16% 20%, rgba(216,230,184,.35), transparent 38%), linear-gradient(135deg, #f9f8f1, #eff1e9); }
+    .hero-inner { max-width: 1420px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(270px, .65fr); gap: clamp(32px, 6vw, 96px); align-items: end; }
+    .eyebrow { font-size: 12px; font-weight: 650; letter-spacing: .1em; text-transform: uppercase; color: var(--forest-soft); margin: 0 0 18px; }
+    h1 { max-width: 1040px; margin: 0; font-size: clamp(42px, 5vw, 68px); line-height: 1.01; letter-spacing: -.055em; font-weight: 650; text-wrap: balance; }
+    .hero-copy { max-width: 430px; color: var(--muted); font-size: 16px; line-height: 1.7; margin: 0 0 3px; }
+    .hero-actions { display: flex; gap: 12px; margin-top: 24px; }
+    .button { border: 1px solid transparent; border-radius: 8px; min-height: 45px; padding: 0 17px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; text-decoration: none; font-weight: 620; transition: background .2s, transform .2s, border-color .2s; }
+    .button:hover { transform: translateY(-1px); }
+    .button:active { transform: translateY(1px) scale(.99); }
+    .button-primary { color: white; background: var(--forest); }
+    .button-primary:hover { background: var(--forest-soft); }
+    .button-secondary { color: var(--forest); background: transparent; border-color: #b8c5b9; }
+    .button-secondary:hover { background: #e9eee3; }
+    .source-note { max-width: 1420px; margin: 36px auto 0; border-top: 1px solid rgba(29,57,45,.15); padding-top: 15px; display: flex; justify-content: space-between; gap: 24px; color: var(--muted); font-size: 12px; }
+    .source-note strong { color: var(--alert); font-weight: 700; letter-spacing: .04em; }
+    .workspace { padding: 28px clamp(20px, 5vw, 74px) 100px; }
+    .workspace-inner { max-width: 1420px; margin: auto; }
+    .view { display: none; }
+    .view.active { display: block; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; padding: 17px 0 24px; }
+    .section-head h2 { margin: 0; font-size: clamp(25px, 3vw, 34px); letter-spacing: -.04em; font-weight: 630; }
+    .section-head p { margin: 8px 0 0; color: var(--muted); line-height: 1.55; max-width: 690px; }
+    .data-stamp { color: var(--muted); font: 12px ui-monospace, SFMono-Regular, Consolas, monospace; white-space: nowrap; }
+    .sensor-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-flow: dense; gap: 18px; align-items: start; }
+    .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
+    .input-panel { grid-column: span 7; }
+    .result-panel { grid-column: span 5; position: sticky; top: 92px; }
+    .panel-head { padding: 20px 22px 15px; display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; border-bottom: 1px solid #e8ebe4; }
+    .panel-head h3 { margin: 0; font-size: 17px; letter-spacing: -.02em; }
+    .panel-head p { margin: 5px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .panel-body { padding: 21px 22px 24px; }
+    .field-section + .field-section { border-top: 1px solid #e8ebe4; margin-top: 21px; padding-top: 19px; }
+    .field-title { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 13px; }
+    .field-title h4 { margin: 0; font-size: 14px; font-weight: 650; }
+    .field-title span { font-size: 11px; color: var(--muted); }
+    .fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px 14px; }
+    .fields.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    label.control { display: block; min-width: 0; }
+    label.control span { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 6px; color: #48564d; font-size: 12px; font-weight: 580; }
+    label.control small { color: #879087; font-size: 10px; font-weight: 450; }
+    input, select { width: 100%; min-height: 41px; padding: 9px 10px; border: 1px solid #d2d9d0; border-radius: 7px; color: var(--ink); background: #fff; }
+    input::placeholder { color: #abb2aa; }
+    input:focus, select:focus { outline: 2px solid rgba(40,77,60,.22); border-color: var(--forest-soft); }
+    .mq-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; }
+    .form-actions { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-top: 22px; }
+    .form-actions-left { display: flex; gap: 9px; }
+    .error-line { color: #8a3f25; background: var(--warn-bg); border-radius: 7px; padding: 11px 12px; margin-top: 13px; font-size: 13px; line-height: 1.45; display: none; }
+    .result-empty { padding: 34px 24px 38px; color: var(--muted); }
+    .result-empty .empty-graphic { height: 135px; border-radius: 10px; margin-bottom: 22px; display: grid; place-items: center; background: linear-gradient(135deg, #ecf0e7, #f8f7ee); overflow: hidden; }
+    .empty-graphic svg { width: 75%; height: 90%; }
+    .result-empty strong { display: block; margin-bottom: 7px; color: var(--ink); font-size: 16px; }
+    .result-empty p { margin: 0; font-size: 13px; line-height: 1.6; }
+    .result-content { display: none; padding: 22px; }
+    .result-status { display: flex; align-items: center; gap: 13px; margin-bottom: 22px; }
+    .status-glyph { width: 48px; height: 48px; border-radius: 13px; background: var(--ok-bg); display: grid; place-items: center; color: var(--forest); font: 24px Georgia, serif; }
+    .status-glyph.warning, .status-glyph.spoiled { background: var(--warn-bg); color: var(--alert); }
+    .status-kicker { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .09em; }
+    .status-name { text-transform: capitalize; font-size: 24px; letter-spacing: -.04em; font-weight: 650; margin-top: 2px; }
+    .prob-row { display: grid; grid-template-columns: 100px 1fr 46px; align-items: center; gap: 10px; margin: 12px 0; font-size: 12px; }
+    .prob-track { height: 8px; background: #edf0e9; border-radius: 9px; overflow: hidden; }
+    .prob-fill { height: 100%; background: var(--forest-soft); border-radius: inherit; transition: width .55s ease; }
+    .prob-fill.warning { background: #b48b50; }
+    .prob-fill.spoiled { background: var(--alert); }
+    .prob-value { text-align: right; font: 12px ui-monospace, SFMono-Regular, Consolas, monospace; font-variant-numeric: tabular-nums; }
+    .risk-box { background: #f1f3ed; border-radius: 9px; padding: 15px; margin-top: 22px; }
+    .risk-box h4 { font-size: 13px; margin: 0 0 8px; }
+    .risk-number { font-size: 27px; font-variant-numeric: tabular-nums; font-weight: 650; letter-spacing: -.04em; }
+    .risk-explainer { font-size: 12px; color: var(--muted); line-height: 1.5; margin-top: 5px; }
+    .risk-alert { margin-top: 10px; font-weight: 650; font-size: 12px; }
+    .result-warning { margin-top: 16px; padding: 12px; background: #fff4e6; border: 1px solid #edd8ba; border-radius: 8px; color: #795527; font-size: 12px; line-height: 1.5; }
+    .result-warning ul { margin: 7px 0 0; padding-left: 18px; }
+    .result-sim-label { display: inline-flex; padding: 5px 7px; background: var(--warn-bg); color: var(--alert); font-size: 10px; font-weight: 750; letter-spacing: .08em; border-radius: 4px; margin-bottom: 14px; }
+    .subtabs { display: flex; gap: 4px; padding: 5px; background: #e9ece5; border-radius: 9px; }
+    .subtabs button { border: 0; background: transparent; color: var(--muted); cursor: pointer; padding: 8px 11px; border-radius: 6px; font-size: 12px; }
+    .subtabs button.active { background: var(--surface); color: var(--forest); box-shadow: 0 1px 3px #263c2b1a; }
+    .file-panel { max-width: 1120px; margin: 0 auto; }
+    .upload-zone { margin: 21px; padding: 30px; text-align: center; border: 1px dashed #aab8aa; border-radius: 11px; background: #f8f8f2; transition: .2s ease; }
+    .upload-zone.dragover { background: #edf1e6; border-color: var(--forest); }
+    .upload-zone h3 { margin: 12px 0 5px; font-size: 17px; }
+    .upload-zone p { color: var(--muted); font-size: 13px; margin: 0 0 16px; }
+    .upload-zone input[type=file] { display: none; }
+    .audit-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; padding: 0 21px 20px; }
+    .audit-cell { padding: 14px; background: #f4f5ee; border-radius: 8px; }
+    .audit-cell small { display: block; color: var(--muted); font-size: 11px; margin-bottom: 5px; }
+    .audit-cell strong { font-size: 19px; font-variant-numeric: tabular-nums; }
+    .missing-list { padding: 0 21px 20px; font-size: 13px; line-height: 1.7; color: var(--muted); }
+    .missing-list strong { color: var(--ink); }
+    .mapping { padding: 21px; border-top: 1px solid var(--line); }
+    .mapping h3 { margin: 0 0 6px; font-size: 16px; }
+    .mapping p { margin: 0 0 14px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .mapping-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px 18px; }
+    .mapping-row { display: grid; grid-template-columns: 1fr minmax(130px, .8fr); align-items: center; gap: 10px; font-size: 12px; }
+    .mapping-row.missing { color: #985332; }
+    .project-controls { border-top: 1px solid var(--line); margin-top: 18px; padding-top: 17px; display: flex; align-items: end; flex-wrap: wrap; gap: 12px; }
+    .project-controls label { width: min(330px, 100%); }
+    .project-result { margin: 16px 0 0; padding: 15px; border-radius: 8px; background: #edf1e8; display: none; }
+    .project-result h4 { margin: 0 0 7px; font-size: 14px; }
+    .project-result p { margin: 5px 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .preview-wrap { overflow: auto; margin: 0 21px 21px; border: 1px solid var(--line); border-radius: 8px; max-height: 360px; }
+    .row-jump { padding: 0 21px 12px; display: flex; align-items: end; gap: 11px; }
+    .row-jump label { width: min(250px, 100%); }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th, td { text-align: left; padding: 9px 11px; white-space: nowrap; border-bottom: 1px solid #e7eae3; }
+    th { position: sticky; top: 0; background: #f0f2eb; color: #47564b; font-weight: 650; }
+    tr.selected { background: #eef3e7; }
+    .row-select { border: 1px solid #cdd6ca; color: var(--forest); background: white; border-radius: 5px; padding: 5px 8px; cursor: pointer; }
+    .validation-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px; }
+    .metric-panel { padding: 22px; }
+    .metric-panel h3 { margin: 0 0 4px; font-size: 16px; }
+    .metric-panel > p { color: var(--muted); font-size: 12px; margin: 0 0 18px; line-height: 1.5; }
+    .metric-table { width: 100%; }
+    .metric-table td, .metric-table th { padding: 10px 7px; }
+    .metric-table th { position: static; background: none; border-bottom: 1px solid var(--line); }
+    .metric-table td:last-child, .metric-table th:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+    .lot-strip { display: flex; gap: 5px; height: 10px; margin: 14px 0 8px; }
+    .lot-strip span:first-child { background: var(--forest); border-radius: 8px 0 0 8px; }
+    .lot-strip span:last-child { background: #c4a771; border-radius: 0 8px 8px 0; }
+    .validation-copy { color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .explain { padding: 90px clamp(20px, 5vw, 74px) 96px; background: #e9ede4; }
+    .explain-inner { max-width: 1420px; margin: auto; display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(30px, 8vw, 120px); align-items: start; }
+    .explain-title { position: sticky; top: 118px; }
+    .explain-title h2 { font-size: clamp(30px, 4vw, 49px); line-height: 1.05; letter-spacing: -.05em; margin: 0; max-width: 510px; text-wrap: balance; }
+    .explain-title p { color: var(--muted); max-width: 390px; line-height: 1.65; margin-top: 18px; }
+    .explain-list { display: grid; gap: 12px; }
+    .explain-item { background: rgba(255,254,250,.78); border: 1px solid #d6ded3; border-radius: 12px; padding: 21px; min-height: 120px; }
+    .explain-item h3 { margin: 0 0 8px; font-size: 15px; }
+    .explain-item p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; max-width: 610px; }
+    footer { background: var(--forest); color: #eaf0e5; padding: 35px clamp(20px, 5vw, 74px); }
+    .footer-inner { max-width: 1420px; margin: auto; display: flex; justify-content: space-between; align-items: center; gap: 20px; font-size: 12px; }
+    .footer-inner p { margin: 0; color: #c3d0c3; }
+    .toast { position: fixed; bottom: 22px; right: 22px; max-width: min(440px, calc(100vw - 44px)); padding: 13px 16px; background: #273c30; color: white; border-radius: 8px; box-shadow: var(--shadow); z-index: 30; display: none; font-size: 13px; }
+    .loading { opacity: .65; pointer-events: none; }
+    .spinner { display: inline-block; width: 13px; height: 13px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin .75s linear infinite; vertical-align: -2px; margin-right: 7px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (max-width: 920px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 17px; }
+      .hero-copy { max-width: 670px; }
+      .input-panel { grid-column: span 7; }
+      .result-panel { grid-column: span 5; }
+      .explain-inner { grid-template-columns: .8fr 1.2fr; gap: 35px; }
+    }
+    @media (max-width: 700px) {
+      .topbar { height: 62px; padding: 0 17px; }
+      .connection { display: none; }
+      .nav button { padding: 9px 8px; font-size: 12px; }
+      .hero { padding: 46px 18px 25px; }
+      h1 { font-size: clamp(39px, 11vw, 58px); }
+      .hero-actions { flex-wrap: wrap; }
+      .source-note { flex-direction: column; gap: 8px; margin-top: 25px; }
+      .workspace { padding: 18px 15px 70px; }
+      .section-head { align-items: start; flex-direction: column; }
+      .data-stamp { white-space: normal; }
+      .input-panel, .result-panel { grid-column: 1 / -1; }
+      .result-panel { position: static; }
+      .fields.three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .mq-grid { grid-template-columns: repeat(2, 1fr); }
+      .validation-grid { grid-template-columns: 1fr; }
+      .audit-summary { grid-template-columns: 1fr; }
+      .mapping-grid { grid-template-columns: 1fr; }
+      .explain { padding: 65px 20px; }
+      .explain-inner { grid-template-columns: 1fr; }
+      .explain-title { position: static; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to model workspace</a>
+  <nav class="topbar" aria-label="Main navigation">
+    <a class="brand" href="#top" aria-label="Stored crop reading desk home"><span class="brand-mark" aria-hidden="true">s</span><span>Stored crop <span style="font-weight:450;color:#68776d">/ reading desk</span></span></a>
+    <div class="nav" role="tablist" aria-label="Workspace views">
+      <button type="button" class="nav-tab" data-view="reading" aria-current="page">Check reading</button>
+      <button type="button" class="nav-tab" data-view="file">Import data</button>
+      <button type="button" class="nav-tab" data-view="validation">Validation</button>
+    </div>
+    <div class="connection"><span class="dot" aria-hidden="true"></span><span id="connection-text">Checking saved models</span></div>
+  </nav>
+  <main id="main">
+    <header class="hero" id="top">
+      <div class="hero-inner">
+        <div>
+          <p class="eyebrow">Reading desk · local model check</p>
+          <h1>Check a crop lot with its sensor readings.</h1>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#workspace" data-open-view="reading">Enter a reading</a>
+            <button class="button button-secondary" type="button" id="hero-import">Inspect a CSV</button>
+          </div>
+        </div>
+        <p class="hero-copy">Enter aligned environment, MQ, and recent history values. See a current-status estimate, next-inspection risk, and whether the readings are outside the model’s training range.</p>
+      </div>
+      <div class="source-note"><span><strong>SIMULATION ONLY</strong> · saved model was trained on generated readings and labels.</span><span id="model-state">Loading model and validation records…</span></div>
+    </header>
+
+    <section class="workspace" id="workspace" aria-label="Model workspace">
+      <div class="workspace-inner">
+        <section class="view active" id="view-reading" aria-labelledby="reading-title">
+          <div class="section-head">
+            <div><h2 id="reading-title">Enter one time-aligned reading</h2><p>The model needs all nine MQ channels and the environmental values from the same crop lot and time. History summaries must cover only readings up to now.</p></div>
+            <div class="data-stamp">24 model fields · saved model · no retraining</div>
+          </div>
+          <div class="sensor-grid">
+            <article class="panel input-panel">
+              <div class="panel-head"><div><h3>Current reading</h3><p>Use sensor units shown below. MQ values are response indices, not gas concentrations.</p></div><div class="subtabs" aria-label="Input source"><button type="button" class="active" id="manual-mode">Manual</button><button type="button" id="file-mode">CSV row</button></div></div>
+              <div class="panel-body">
+                <form id="reading-form" novalidate>
+                  <div class="field-section"><div class="field-title"><h4>Prediction inputs</h4><span>Choose one measured input set</span></div><div class="fields three"><label class="control"><span>Model input set<small>saved simulator models</small></span><select id="feature-mode"><option value="combined">Environment + nine MQ</option><option value="environment_only">Environment only</option><option value="mq_only">Nine MQ channels only</option></select></label></div><p class="validation-copy" id="feature-mode-note">Combined mode requires environment, all nine MQ readings, and history from the same crop lot and time.</p></div>
+                  <div class="field-section"><div class="field-title"><h4>Crop and inspection timing</h4><span>Required for combined risk</span></div><div class="fields three" id="identity-fields"></div></div>
+                  <div class="field-section"><div class="field-title"><h4>AeroSense environment</h4><span>Reading at prediction time</span></div><div class="fields" id="environment-fields"></div></div>
+                  <div class="field-section"><div class="field-title"><h4>Smart Nose array</h4><span>Nine channels · response index</span></div><div class="mq-grid" id="mq-fields"></div></div>
+                  <div class="field-section"><div class="field-title"><h4>Lot context and history</h4><span>Through current reading</span></div><div class="fields" id="history-fields"></div></div>
+                  <div class="form-actions"><div class="form-actions-left"><button class="button button-primary" id="predict-button" type="submit">Check quality</button><button class="button button-secondary" type="button" id="demo-button">Load simulated example</button></div><button class="button button-secondary" type="reset" id="clear-button">Clear</button></div>
+                  <div class="error-line" id="form-error" role="alert"></div>
+                </form>
+              </div>
+            </article>
+            <aside class="panel result-panel" aria-live="polite" aria-label="Prediction result">
+              <div class="panel-head"><div><h3>Reading result</h3><p>Current quality and risk at the next inspection</p></div></div>
+              <div class="result-empty" id="result-empty"><div class="empty-graphic" aria-hidden="true"><svg viewBox="0 0 360 150" fill="none"><path d="M0 114C50 110 70 63 118 73s47 49 93 34 54-63 99-48 36 36 50 32" stroke="#55735D" stroke-width="3"/><path d="M0 128C50 124 70 89 118 96s47 27 93 16 54-38 99-31 36 23 50 19" stroke="#B4C69B" stroke-width="2" stroke-dasharray="4 7"/><circle cx="118" cy="73" r="5" fill="#1D392D"/><circle cx="211" cy="107" r="5" fill="#1D392D"/><circle cx="310" cy="59" r="5" fill="#1D392D"/></svg></div><strong>Waiting for a complete reading</strong><p>Fill the required fields and check the values. Missing sensors and history are reported; the app won’t guess them.</p></div>
+              <div class="result-content" id="result-content"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="view-file" aria-labelledby="file-title">
+          <div class="section-head"><div><h2 id="file-title">Inspect a sensor file</h2><p>Upload a CSV to check timestamps, missing model inputs, and data ranges. Map its columns to the model schema, then score a row only when all paired inputs exist.</p></div><div class="data-stamp">CSV only · up to 32 MB · stored in memory</div></div>
+          <article class="panel file-panel">
+            <div class="upload-zone" id="drop-zone"><div aria-hidden="true" style="font-size:24px;color:#48634d">↥</div><h3>Choose or drop a CSV file</h3><p>Choose combined, environment-only, or MQ-only scoring. Combined predictions require paired environment and MQ readings from the same lot and time.</p><label class="button button-secondary" for="csv-file">Choose CSV</label><input id="csv-file" type="file" accept=".csv,text/csv"></div>
+            <div id="file-audit" hidden></div>
+          </article>
+        </section>
+
+        <section class="view" id="view-validation" aria-labelledby="validation-title">
+          <div class="section-head"><div><h2 id="validation-title">Saved model validation</h2><p>These values come from saved evaluations. Complete starting lots were kept together in the split. Every score shown here describes simulated data only.</p></div><div class="data-stamp" id="validation-split-label">Loading saved metrics</div></div>
+          <div id="validation-content" class="validation-grid"></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="explain" aria-labelledby="how-title">
+      <div class="explain-inner">
+        <div class="explain-title"><p class="eyebrow">How the check works</p><h2 id="how-title">A model result is only as good as its paired readings.</h2><p>Use device records with matching crop lot, timestamp, and inspection history. The interface checks what is present and makes gaps visible before prediction.</p></div>
+        <div class="explain-list">
+          <article class="explain-item"><h3>1. Check the source</h3><p>The file inspector reports missing fields, invalid or duplicate timestamps, and recording gaps when a timestamp column is present. It does not create lot IDs or pair separate sensor files.</p></article>
+          <article class="explain-item"><h3>2. Map measured values</h3><p>Map your CSV’s real column names to the model’s expected inputs. Leave a field unmapped when no measurement exists; prediction will name the missing values.</p></article>
+          <article class="explain-item"><h3>3. Read the result in context</h3><p>Status probabilities describe current condition. Next-check risk is conditional on your stated inspection interval. The model does not claim continuous days remaining or prove a storage intervention works.</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer><div class="footer-inner"><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">s</span><span>Stored crop reading desk</span></a><p>Local model interface · simulation-trained · real sensor hardware is not connected</p></div></footer>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+  <script>
+    const fields = {
+      identity: [
+        {key:'crop', label:'Crop', type:'select', options:['wheat','maize','potato','onion','spinach']},
+        {key:'storage_age_days', label:'Storage age', unit:'days', min:0},
+        {key:'next_inspection_interval_days', label:'Next check in', unit:'days', min:0.01}
+      ],
+      environment: [
+        {key:'Temperature(°C)',label:'Temperature',unit:'°C',min:-50,max:85},
+        {key:'Humidity(%)',label:'Relative humidity',unit:'%',min:0,max:100},
+        {key:'Pressure(hPa)',label:'Pressure',unit:'hPa',min:300,max:1200},
+        {key:'AQI',label:'AeroSense AQI',unit:'device scale',min:0},
+        {key:'Gas (kOhms)',label:'Gas resistance',unit:'kΩ',min:0},
+        {key:'Altitude(m)',label:'Altitude',unit:'m',min:-500,max:10000},
+        {key:'DewPoint(°C)',label:'Dew point',unit:'°C',min:-100,max:85},
+        {key:'HeatIndex(°C)',label:'Heat index',unit:'°C',min:-50,max:100}
+      ],
+      mq: [2,3,4,5,6,7,8,9,135].map(n=>({key:`MQ${n}_response_index_SIM`,label:`MQ${n}`,unit:'response index',min:0})),
+      history: [
+        {key:'grain_moisture_pct_SIM',label:'Grain moisture',unit:'% · optional',min:0,max:100,optional:true},
+        {key:'lot_mass_kg_SIM',label:'Lot mass',unit:'kg · optional',min:0,optional:true},
+        {key:'past_mean_temp_C_SIM',label:'Past mean temperature',unit:'°C',min:-50,max:85},
+        {key:'past_mean_rh_pct_SIM',label:'Past mean RH',unit:'%',min:0,max:100},
+        {key:'past_hot_degree_days_SIM',label:'Hot degree days',unit:'°C·days',min:0}
+      ]
+    };
+    const form = document.getElementById('reading-form');
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
+    const toast = (message) => { const el=$('#toast'); el.textContent=message; el.style.display='block'; clearTimeout(window.toastTimer); window.toastTimer=setTimeout(()=>el.style.display='none',3600); };
+    const esc = value => String(value??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
+    let uploadToken = null, uploadColumns = [], uploadSafeColumns = [], uploadAudit = null, selectedRow = 0;
+    const modelFields = {combined:'combined', environment_only:'environment_only', mq_only:'mq_only'};
+
+    function fieldHtml(field) {
+      const required = field.optional ? '' : ' required';
+      const placeholder = field.optional ? 'Leave blank if not measured' : 'Enter measured value';
+      if (field.type === 'select') return `<label class="control"><span>${field.label}<small>${field.optional?'optional':'required'}</small></span><select data-key="${field.key}"${required}><option value="">Choose crop</option>${field.options.map(x=>`<option value="${x}">${x[0].toUpperCase()+x.slice(1)}</option>`).join('')}</select></label>`;
+      return `<label class="control"><span>${field.label}<small>${field.unit||''}</small></span><input data-key="${field.key}" type="number" step="any" ${field.min!==undefined?`min="${field.min}"`:''} ${field.max!==undefined?`max="${field.max}"`:''} placeholder="${placeholder}"${required}></label>`;
+    }
+    $('#identity-fields').innerHTML=fields.identity.map(fieldHtml).join('');
+    $('#environment-fields').innerHTML=fields.environment.map(fieldHtml).join('');
+    $('#mq-fields').innerHTML=fields.mq.map(fieldHtml).join('');
+    $('#history-fields').innerHTML=fields.history.map(fieldHtml).join('');
+
+    function applyFeatureMode() {
+      const mode=$('#feature-mode').value;
+      const showEnvironment=mode!=='mq_only', showMq=mode!=='environment_only';
+      $('#environment-fields').closest('.field-section').hidden=!showEnvironment;
+      $('#history-fields').closest('.field-section').hidden=!showEnvironment;
+      $('#mq-fields').closest('.field-section').hidden=!showMq;
+      $$('[data-key]',form).forEach(el=>{
+        const key=el.dataset.key, isOptional=fields.history.some(f=>f.key===key&&f.optional);
+        const visible=key==='crop'||key==='storage_age_days'||key==='next_inspection_interval_days'
+          ? true : key.startsWith('MQ') ? showMq : key==='grain_moisture_pct_SIM'||key==='lot_mass_kg_SIM'||key.startsWith('past_')||fields.environment.some(f=>f.key===key) ? showEnvironment : true;
+        el.required=visible&&!isOptional&&(key==='crop'||key==='storage_age_days'||key==='next_inspection_interval_days'&&mode==='combined'||key.startsWith('MQ')&&showMq||showEnvironment&&!key.startsWith('MQ')&&key!=='crop'&&key!=='storage_age_days'&&key!=='next_inspection_interval_days');
+        el.disabled=!visible;
+      });
+      $('#feature-mode-note').textContent=mode==='combined'
+        ? 'Combined mode needs environment, all nine MQ readings, and through-current history from the same crop lot and time. Next-check risk is available when an inspection interval is supplied.'
+        : mode==='environment_only'
+          ? 'Environment-only mode uses environmental and history fields. It returns current status only; this mode has no saved survival model.'
+          : 'MQ-only mode uses crop, storage age, and all nine MQ response indices. It returns current status only; no environment values are invented.';
+    }
+    $('#feature-mode').addEventListener('change',applyFeatureMode);
+    applyFeatureMode();
+
+    function showView(name) {
+      $$('.view').forEach(v=>v.classList.toggle('active',v.id===`view-${name}`));
+      $$('.nav-tab').forEach(t=>{ if(t.dataset.view===name)t.setAttribute('aria-current','page'); else t.removeAttribute('aria-current'); });
+      document.getElementById('workspace').scrollIntoView({behavior:'smooth',block:'start'});
+      if(name==='validation') loadValidation();
+    }
+    $$('.nav-tab').forEach(t=>t.addEventListener('click',()=>showView(t.dataset.view)));
+    $$('[data-open-view]').forEach(a=>a.addEventListener('click',()=>showView(a.dataset.openView)));
+    $('#hero-import').addEventListener('click',()=>showView('file'));
+    $('#file-mode').addEventListener('click',()=>showView('file'));
+    $('#manual-mode').addEventListener('click',()=>showView('reading'));
+
+    async function api(url, options={}) {
+      const response=await fetch(url,options); const data=await response.json().catch(()=>({error:'Server returned an invalid response'}));
+      if(!response.ok) throw new Error(data.error||`Request failed (${response.status})`); return data;
+    }
+    function valuesFromForm() {
+      const result={};
+      $$('[data-key]',form).forEach(el=>{ if(el.value==='') result[el.dataset.key]=null; else result[el.dataset.key]=el.dataset.key==='crop'?el.value:Number(el.value); });
+      result.feature_mode=$('#feature-mode').value;
+      return result;
+    }
+    function renderResult(result) {
+      $('#result-empty').style.display='none'; const host=$('#result-content'); host.style.display='block';
+      const status=result.predicted_status; const probs=result.status_probabilities;
+      const icons={acceptable:'✓',warning:'~',spoiled:'!'};
+      let risk='';
+      if(result.probability_next_check_leaves_acceptable_state!==null) {
+        const riskPct=(100*result.probability_next_check_leaves_acceptable_state).toFixed(1);
+        risk=`<div class="risk-box"><h4>Chance of leaving acceptable by the next check</h4><div class="risk-number">${riskPct}%</div><div class="risk-explainer">Next inspection in ${result.next_inspection_interval_days} days. This means warning or spoiled in the simulated target.</div><div class="risk-alert">${result.early_warning_alert?'Review this lot at the next check.':'Below the simulator alert threshold.'} Threshold: ${result.early_warning_alert_threshold===null?'not available':(100*result.early_warning_alert_threshold).toFixed(1)+'%'}</div></div>`;
+      }
+      let failed='';
+      if(result.probability_first_spoiled_inspection_by_next_check!==null) failed=`<div class="risk-box"><h4>Chance of first spoiled inspection by next check</h4><div class="risk-number">${(100*result.probability_first_spoiled_inspection_by_next_check).toFixed(2)}%</div><div class="risk-explainer">This is a separate target from entering warning. It is conditional on the supplied next-check interval.</div></div>`;
+      const warnings=result.warnings?.length?`<div class="result-warning"><strong>Outside the model’s simulated training range</strong><ul>${result.warnings.map(w=>`<li>${w}</li>`).join('')}</ul></div>`:'';
+      host.innerHTML=`<span class="result-sim-label">${result.label}</span><div class="result-status"><div class="status-glyph ${status}">${icons[status]}</div><div><div class="status-kicker">Most likely current status</div><div class="status-name">${status}</div></div></div>${['acceptable','warning','spoiled'].map(label=>`<div class="prob-row"><span>${label[0].toUpperCase()+label.slice(1)}</span><div class="prob-track"><div class="prob-fill ${label}" style="width:${(100*probs[label]).toFixed(2)}%"></div></div><span class="prob-value">${(100*probs[label]).toFixed(1)}%</span></div>`).join('')}${risk}${failed}${warnings}<p class="validation-copy">No remaining-days number is estimated. This model was trained on simulated records; these probabilities are not validated crop quality.</p>`;
+    }
+    form.addEventListener('submit',async e=>{
+      e.preventDefault(); $('#form-error').style.display='none';
+      if(!form.reportValidity()) return;
+      const button=$('#predict-button'); button.innerHTML='<span class="spinner"></span>Checking'; form.classList.add('loading');
+      try { const result=await api('/api/predict',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(valuesFromForm())}); renderResult(result); }
+      catch(err){ const line=$('#form-error'); line.textContent=err.message; line.style.display='block'; }
+      finally { button.textContent='Check quality'; form.classList.remove('loading'); }
+    });
+    $('#clear-button').addEventListener('click',()=>{ setTimeout(()=>{ $('#result-content').style.display='none'; $('#result-empty').style.display='block'; $('#form-error').style.display='none'; },0); });
+    $('#demo-button').addEventListener('click',async()=>{
+      try { const demo=await api('/api/demo'); $$('[data-key]',form).forEach(el=>{ el.value=demo[el.dataset.key]??''; }); toast('Loaded a simulated example. It is not a real sensor record.'); }
+      catch(err){ toast(err.message); }
+    });
+
+    function displayAudit(data) {
+      uploadToken=data.token; uploadColumns=data.columns||[];
+      uploadAudit=data.audit;
+      const box=$('#file-audit'); box.hidden=false;
+      const a=data.audit;
+      const missing=a.missing_required_model_fields;
+      uploadSafeColumns=uploadColumns.filter(column=>!(a.blocked_predictor_sources||[]).includes(column));
+      const invalidCount=Object.values(a.invalid_numeric_values||{}).reduce((sum,n)=>sum+n,0);
+      const rangeCount=Object.values(a.out_of_basic_sensor_range||{}).reduce((sum,n)=>sum+n,0);
+      box.innerHTML=`<div class="audit-summary"><div class="audit-cell"><small>Rows in file</small><strong>${a.rows}</strong></div><div class="audit-cell"><small>Required fields matched</small><strong>${a.matched_model_fields.filter(x=>!fields.history.find(f=>f.key===x&&f.optional)).length} / 22</strong></div><div class="audit-cell"><small>Invalid timestamps</small><strong>${a.timestamp_audit?a.timestamp_audit.invalid_timestamps:'not found'}</strong></div></div><div class="missing-list"><strong>${a.simulated_flag_detected?'Simulator data detected.':'Source fields are not verified as paired real-lot measurements.'}</strong><br>${missing.length?`Missing combined-model fields: ${missing.map(x=>`<code>${esc(x)}</code>`).join(', ')}`:'All combined-model field names appear in the file. Check that rows really refer to the same lot and time.'}${a.missing_optional_model_fields.length?`<br>Optional values not supplied: ${a.missing_optional_model_fields.map(x=>`<code>${esc(x)}</code>`).join(', ')}.`:''}<br>Non-numeric sensor/context values: ${invalidCount}; values outside basic unit checks: ${rangeCount}.${a.blocked_predictor_sources.length?`<br>Target/leakage columns are blocked from predictor mapping: ${a.blocked_predictor_sources.map(x=>`<code>${esc(x)}</code>`).join(', ')}.`:''}${a.timestamp_audit?`<br>Duplicate timestamps: ${a.timestamp_audit.duplicate_timestamps}; gaps over 30 min: ${a.timestamp_audit.gaps_over_30_minutes}.`:''}${a.trajectory_key_audit?`<br>Duplicate trajectory/time keys: ${a.trajectory_key_audit.duplicate_trajectory_time_keys}; time order valid: ${a.trajectory_key_audit.strictly_increasing_within_trajectory}.`:''}<br><span>${a.note}</span></div><div class="mapping"><h3>Map your file columns</h3><p>Choose an input mode, then map only measured fields from the CSV. Combined scoring is valid only for paired values from the same crop lot and time. The output contains one prediction row per input row; incomplete rows include an error instead of invented readings.</p><div class="project-controls"><label class="control"><span>Model input set<small>SIMULATION ONLY</small></span><select id="csv-feature-mode"><option value="combined">Environment + nine MQ</option><option value="environment_only">Environment only</option><option value="mq_only">Nine MQ channels only</option></select></label><label class="control"><span>Crop if the CSV has no crop column<small>optional fallback</small></span><select id="csv-crop-fallback"><option value="">Use mapped crop column</option>${['wheat','maize','potato','onion','spinach'].map(c=>`<option value="${c}">${c[0].toUpperCase()+c.slice(1)}</option>`).join('')}</select></label><label class="control"><span>Inspection interval column<small>days · combined risk only</small></span><select id="batch-interval-column"><option value="">Status only; no next-check risk</option>${uploadSafeColumns.map(col=>`<option value="${esc(col)}" ${col==='next_inspection_interval_days'?'selected':''}>${esc(col)}</option>`).join('')}</select></label><button type="button" class="button button-primary" id="score-csv-button">Predict every row and download CSV</button></div><div class="project-result" id="batch-result" aria-live="polite"></div><div class="mapping-grid" id="mapping-grid"></div><div class="project-controls"><label class="control"><span>Future interval column<small>days · one row per future period</small></span><select id="future-interval-column"><option value="">Choose column</option>${uploadSafeColumns.map(col=>`<option value="${esc(col)}" ${['interval_days','next_inspection_interval_days'].includes(col)?'selected':''}>${esc(col)}</option>`).join('')}</select></label><button type="button" class="button button-secondary" id="project-button">Project explicit future path</button></div><div class="project-result" id="project-result" aria-live="polite"></div></div><div class="row-jump"><label class="control"><span>Load any row by index<small>0 to ${a.rows-1}</small></span><input id="row-index" type="number" min="0" max="${a.rows-1}" step="1" value="0"></label><button type="button" class="button button-secondary" id="load-row-button">Load selected row</button></div><div class="preview-wrap"><table><thead id="preview-head"></thead><tbody id="preview-body"></tbody></table></div>`;
+      renderMapping(a);
+      $('#project-button').addEventListener('click',projectPath);
+      $('#score-csv-button').addEventListener('click',scoreCsv);
+      $('#csv-feature-mode').addEventListener('change',()=>{renderMapping(a);$('#project-button').disabled=$('#csv-feature-mode').value!=='combined';});
+      $('#project-button').disabled=$('#csv-feature-mode').value!=='combined';
+      $('#load-row-button').addEventListener('click',()=>selectRow(Number($('#row-index').value)));
+      if(data.preview.length){
+        const shown=Object.keys(data.preview[0]).filter(k=>k==='_row_index'||uploadColumns.includes(k)).slice(0,10);
+        $('#preview-head').innerHTML=`<tr><th>Row</th>${shown.filter(k=>k!=='_row_index').map(k=>`<th>${esc(k)}</th>`).join('')}<th>Use</th></tr>`;
+        $('#preview-body').innerHTML=data.preview.map(row=>`<tr data-row="${row._row_index}"><td>${row._row_index}</td>${shown.filter(k=>k!=='_row_index').map(k=>`<td>${esc(row[k]??'—')}</td>`).join('')}<td><button type="button" class="row-select" data-row-use="${row._row_index}">Use row</button></td></tr>`).join('');
+        $$('[data-row-use]').forEach(btn=>btn.addEventListener('click',()=>selectRow(Number(btn.dataset.rowUse))));
+      }
+    }
+    function renderMapping(a) {
+      const mode=$('#csv-feature-mode')?.value||'combined';
+      const all=[...fields.identity.filter(x=>x.key!=='next_inspection_interval_days'),...(mode==='mq_only'?[]:fields.environment),...(mode==='environment_only'?[]:fields.mq),...(mode==='mq_only'?[]:fields.history)];
+      $('#mapping-grid').innerHTML=all.map(field=>{
+        const exact=uploadColumns.includes(field.key)?field.key:'';
+        return `<label class="mapping-row ${exact?'':'missing'}"><span>${field.label}<small> · ${field.unit||'required'}</small></span><select data-map="${field.key}"><option value="">Not in file</option>${uploadSafeColumns.map(col=>`<option value="${esc(col)}" ${col===exact?'selected':''}>${esc(col)}</option>`).join('')}</select></label>`;
+      }).join('');
+    }
+    async function scoreCsv() {
+      const button=$('#score-csv-button'), result=$('#batch-result');
+      const mapping={}; $$('[data-map]').forEach(el=>{mapping[el.dataset.map]=el.value;});
+      button.disabled=true; button.innerHTML='<span class="spinner"></span>Scoring rows'; result.style.display='block';
+      try {
+        const response=await fetch('/api/predict-csv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:uploadToken,feature_mode:$('#csv-feature-mode').value,mapping,crop_fallback:$('#csv-crop-fallback').value,interval_column:$('#batch-interval-column').value})});
+        if(!response.ok){const data=await response.json().catch(()=>({error:'Prediction export failed'}));throw new Error(data.error||'Prediction export failed');}
+        const blob=await response.blob(), url=URL.createObjectURL(blob), link=document.createElement('a');
+        link.href=url; link.download='simulation_only_predictions.csv'; link.click(); URL.revokeObjectURL(url);
+        result.textContent='Prediction CSV downloaded. Rows with missing or invalid required inputs are listed with an error and no score.';
+      } catch(err){result.textContent=`Could not score this file: ${err.message}`;}
+      finally {button.disabled=false;button.textContent='Predict every row and download CSV';}
+    }
+    async function projectPath() {
+      const intervalColumn=$('#future-interval-column').value;
+      const mapping={}; $$('[data-map]').forEach(el=>{mapping[el.dataset.map]=el.value;});
+      const button=$('#project-button'), result=$('#project-result'); button.disabled=true; button.innerHTML='<span class="spinner"></span>Projecting';
+      try {
+        const report=await api('/api/project',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:uploadToken,mapping,interval_column:intervalColumn})});
+        result.style.display='block';
+        result.innerHTML=`<span class="result-sim-label">${esc(report.label)}</span><h4>Conditional risk along ${report.explicit_future_rows} supplied future periods</h4>${report.periods.map(p=>`<p>Period ${p.period} · ${p.interval_days} days · next-check risk ${(100*p.hazard).toFixed(2)}% · cumulative failure chance ${(100*p.cumulative_failure_probability).toFixed(2)}%</p>`).join('')}<p>${report.median_time_to_event_days_within_path===null?'Median event time was not reached within this supplied path.':`Median event time within supplied path: ${report.median_time_to_event_days_within_path} days.`} Restricted mean within path: ${report.restricted_mean_time_to_event_days_within_path.toFixed(2)} days.</p><p>${esc(report.note)}</p>`;
+      } catch(err) { result.style.display='block'; result.innerHTML=`<strong>Path cannot be projected</strong><p>${esc(err.message)}</p>`; }
+      finally { button.disabled=false; button.textContent='Project explicit future path'; }
+    }
+    async function selectRow(index) {
+      if(!Number.isInteger(index)||index<0||index>=uploadAudit.rows){toast(`Choose a row index from 0 to ${uploadAudit.rows-1}.`);return;}
+      selectedRow=index; $$('#preview-body tr').forEach(tr=>tr.classList.toggle('selected',Number(tr.dataset.row)===index));
+      $('#feature-mode').value=$('#csv-feature-mode').value; applyFeatureMode();
+        const crop=$('[data-key="crop"]',form).value;
+      const interval=$('[data-key="next_inspection_interval_days"]',form).value;
+      try {
+        const data=await api(`/api/row?token=${encodeURIComponent(uploadToken)}&index=${index}`);
+        const row=data.row;
+        $$('[data-key]',form).forEach(el=>{ if(el.dataset.key==='crop'||el.dataset.key==='next_inspection_interval_days')return; const mapping=$(`[data-map="${CSS.escape(el.dataset.key)}"]`); const column=mapping?.value||el.dataset.key; el.value=row[column]??''; });
+        const cropSource=$('[data-map="crop"]')?.value||'crop';
+        const cropFromRow=row[cropSource];
+        if(crop) $('[data-key="crop"]',form).value=crop;
+        else if(['wheat','maize','potato','onion','spinach'].includes(String(cropFromRow||'').toLowerCase())) $('[data-key="crop"]',form).value=String(cropFromRow).toLowerCase();
+        if(interval) $('[data-key="next_inspection_interval_days"]',form).value=interval;
+        showView('reading');
+        $('#form-error').textContent='Selected CSV row loaded. Confirm crop and inspection interval; map missing fields before prediction.'; $('#form-error').style.display='block';
+        toast(`Loaded CSV row ${index}. Check mapped fields and interval before scoring.`);
+      } catch(err){toast(err.message);}
+    }
+    const fileInput=$('#csv-file'), drop=$('#drop-zone');
+    async function uploadFile(file) {
+      if(!file) return;
+      if(!file.name.toLowerCase().endsWith('.csv')) { toast('Choose a CSV file. Export Excel sheets to CSV first.'); return; }
+      drop.classList.add('loading'); drop.querySelector('h3').textContent='Inspecting file…';
+      try {
+        const response=await fetch('/api/upload',{method:'POST',headers:{'Content-Type':'text/csv','X-Filename':encodeURIComponent(file.name)},body:file});
+        const data=await response.json(); if(!response.ok) throw new Error(data.error||'Upload failed');
+        displayAudit(data); showView('file'); toast(`Inspected ${data.filename}; file stays in server memory.`);
+      } catch(err){toast(err.message);}
+      finally { drop.classList.remove('loading'); drop.querySelector('h3').textContent='Choose or drop a CSV file'; fileInput.value=''; }
+    }
+    fileInput.addEventListener('change',()=>uploadFile(fileInput.files[0]));
+    drop.addEventListener('dragover',e=>{e.preventDefault();drop.classList.add('dragover');});
+    drop.addEventListener('dragleave',()=>drop.classList.remove('dragover'));
+    drop.addEventListener('drop',e=>{e.preventDefault();drop.classList.remove('dragover');uploadFile(e.dataTransfer.files[0]);});
+
+    async function loadValidation() {
+      try {
+        const data=await api('/api/validation');
+        $('#validation-split-label').textContent=`${data.split.training_lots} train lots · ${data.split.held_out_lots} held out · overlap ${data.split.lot_overlap}`;
+        const statusRows=(data.status_models||[]).map(m=>`<tr><td>${m.model.replaceAll('_',' ')}</td><td>${m.grouped_cv?`${fmt(m.grouped_cv.mean_macro_f1)} ± ${fmt(m.grouped_cv.std_macro_f1)}`:'—'}</td><td>${fmt(m.macro_f1)}</td><td>${fmt(m.spoiled_recall)}</td><td>${fmt(m.log_loss)}</td><td>${fmt(m.brier)}</td></tr>`).join('');
+        const earlyRows=Object.entries(data.early_warning||{}).map(([name,m])=>`<tr><td>${name.replaceAll('_',' ')}</td><td>${fmt(m.brier)}</td><td>${fmt(m.average_precision)}</td><td>${fmt(m.mean_predicted)}</td></tr>`).join('');
+        const cropStatusRows=Object.entries(data.status_by_crop||{}).map(([crop,m])=>`<tr><td>${crop}</td><td>${fmt(m.macro_f1)}</td><td>${fmt(m.per_class?.acceptable?.recall)}</td><td>${fmt(m.per_class?.warning?.recall)}</td><td>${fmt(m.per_class?.spoiled?.recall)}</td></tr>`).join('');
+        const cropSurvivalRows=Object.entries(data.survival_by_crop||{}).map(([crop,m])=>`<tr><td>${crop}</td><td>${m.test?.trajectories??'—'}</td><td>${m.test?.events??'—'}</td><td>${m.test?.right_censored??'—'}</td></tr>`).join('');
+        const threshold=data.early_warning_threshold;
+        $('#validation-content').innerHTML=`<article class="panel metric-panel"><h3>Current status · combined sensors</h3><p>Five-fold grouped validation and the fixed held-out lot set. Preprocessing and tuning stay inside training folds; no post-hoc probability calibration is applied.</p><div class="preview-wrap" style="margin:0"><table class="metric-table"><thead><tr><th>Model</th><th>CV macro F1 ± SD</th><th>Test macro F1</th><th>Spoiled recall</th><th>Log loss</th><th>Brier</th></tr></thead><tbody>${statusRows||'<tr><td colspan="6">Saved classification metrics are unavailable. Train first.</td></tr>'}</tbody></table></div><div class="lot-strip"><span style="flex:${data.split.training_lots||1}"></span><span style="flex:${data.split.held_out_lots||1}"></span></div><div class="validation-copy">Train ${data.split.training_lots} lots; test ${data.split.held_out_lots} different lots. All paths and readings from each lot stay together. Metric values are simulator performance. ${esc(data.holdout_note||'')}</div></article><article class="panel metric-panel"><h3>Per-crop class recall · combined XGBoost</h3><p>Recall shows the fraction of each status class correctly identified in held-out readings.</p><div class="preview-wrap" style="margin:0"><table class="metric-table"><thead><tr><th>Crop</th><th>Macro F1</th><th>Accept.</th><th>Warning</th><th>Spoiled</th></tr></thead><tbody>${cropStatusRows||'<tr><td colspan="5">Per-crop scores unavailable.</td></tr>'}</tbody></table></div></article><article class="panel metric-panel"><h3>Next-check early warning</h3><p>Whether the next inspection leaves acceptable status. The threshold comes from grouped training folds.</p><div class="preview-wrap" style="margin:0"><table class="metric-table"><thead><tr><th>Model</th><th>Brier</th><th>Avg precision</th><th>Mean predicted</th></tr></thead><tbody>${earlyRows||'<tr><td colspan="4">Run diagnose to save these metrics.</td></tr>'}</tbody></table></div><div class="validation-copy">${threshold?`Alert threshold ${(100*threshold.threshold).toFixed(1)}%; training-fold recall ${(100*threshold.oof_recall).toFixed(1)}%; held-out recall ${(100*threshold.test_recall).toFixed(1)}%; alerts on ${(100*threshold.test_alert_fraction).toFixed(1)}% of eligible intervals.`:'Threshold report is unavailable.'}</div></article><article class="panel metric-panel"><h3>Observed survival follow-up</h3><p>Independent held-out trajectories, event counts, and right-censored counts.</p><div class="preview-wrap" style="margin:0"><table class="metric-table"><thead><tr><th>Crop</th><th>Paths</th><th>Events</th><th>Censored</th></tr></thead><tbody>${cropSurvivalRows||'<tr><td colspan="4">Survival counts unavailable.</td></tr>'}</tbody></table></div><div class="validation-copy">${data.survival_warning||'Survival metrics have not been saved yet.'} AUC is not a days-left accuracy score.</div></article><article class="panel metric-panel"><h3>Before using a real record</h3><p>Confirm its lot ID, timestamp, crop, device units, calibration, and inspection protocol.</p><div class="validation-copy">The current evaluation set contains simulated lots only. A real independent holdout is required before describing accuracy on crop measurements.</div></article>`;
+      } catch(err) { $('#validation-content').innerHTML=`<div class="panel metric-panel">Could not load saved validation: ${err.message}</div>`; }
+    }
+    function fmt(value) { return value===null||value===undefined?'—':Number(value).toFixed(4); }
+    async function init() {
+      try {
+        const health=await api('/api/health');
+        $('#connection-text').textContent=health.ready?'Saved models ready':'Models missing';
+        $('#model-state').textContent=health.validation.metrics_available?`${health.validation.split.training_lots} training lots and ${health.validation.split.held_out_lots} held-out lots in saved evaluation`:'Saved evaluation metrics not found';
+      } catch(err) { $('#connection-text').textContent='Model server unavailable'; $('#model-state').textContent=err.message; }
+      if(window.gsap&&window.ScrollTrigger&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.from('.explain-title',{opacity:0,y:22,duration:.7,scrollTrigger:{trigger:'.explain',start:'top 78%'}});
+        gsap.from('.explain-item',{opacity:0,y:18,stagger:.12,duration:.55,scrollTrigger:{trigger:'.explain-list',start:'top 82%'}});
+      }
+    }
+    init();
+  </script>
+</body>
+</html>
