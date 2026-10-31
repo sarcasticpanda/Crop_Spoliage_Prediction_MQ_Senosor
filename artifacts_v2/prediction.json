@@ -1,0 +1,19 @@
+{
+  "label": "SIMULATION ONLY",
+  "crop": "maize",
+  "storage_age_days": 140.0,
+  "predicted_status": "acceptable",
+  "status_probabilities": {
+    "acceptable": 0.7226430773735046,
+    "warning": 0.25243452191352844,
+    "spoiled": 0.024922367185354233
+  },
+  "next_inspection_interval_days": 7.0,
+  "probability_next_check_leaves_acceptable_state": null,
+  "early_warning_alert_threshold": null,
+  "early_warning_alert": null,
+  "probability_first_spoiled_inspection_by_next_check": 0.002292801160365343,
+  "remaining_days_estimate": null,
+  "warnings": [],
+  "note": "SIMULATION ONLY. These saved models reconstruct simulator assumptions. Probabilities are conditional on the supplied current/history inputs and next-check interval; no continuous remaining-days estimate is produced."
+}
