@@ -1,0 +1,126 @@
+{
+  "dataset_name": "synthetic_paired_crop_sensor_v2",
+  "data_origin": "SIMULATED_V2_ASSUMPTION_DRIVEN",
+  "seed": 20261031,
+  "lots_per_crop": 100,
+  "rows": 20000,
+  "columns": 42,
+  "unique_simulated_lots": 500,
+  "unique_simulated_trajectories": 500,
+  "paths_per_lot": 1,
+  "rows_per_crop": {
+    "maize": 4000,
+    "onion": 4000,
+    "potato": 4000,
+    "spinach": 4000,
+    "wheat": 4000
+  },
+  "lots_per_crop_actual": {
+    "maize": 100,
+    "onion": 100,
+    "potato": 100,
+    "spinach": 100,
+    "wheat": 100
+  },
+  "scenario_lots_by_crop": {
+    "maize": {
+      "recommended_range": 17,
+      "warm_dry": 17,
+      "cool_stable": 17,
+      "ambient_stable": 17,
+      "warm_humid": 16,
+      "variable_excursion": 16
+    },
+    "onion": {
+      "cool_stable": 17,
+      "ambient_stable": 17,
+      "recommended_range": 17,
+      "warm_dry": 17,
+      "warm_humid": 16,
+      "variable_excursion": 16
+    },
+    "potato": {
+      "warm_dry": 17,
+      "ambient_stable": 17,
+      "recommended_range": 17,
+      "cool_stable": 17,
+      "warm_humid": 16,
+      "variable_excursion": 16
+    },
+    "spinach": {
+      "warm_dry": 17,
+      "ambient_stable": 17,
+      "recommended_range": 17,
+      "cool_stable": 17,
+      "warm_humid": 16,
+      "variable_excursion": 16
+    },
+    "wheat": {
+      "recommended_range": 17,
+      "cool_stable": 17,
+      "ambient_stable": 17,
+      "warm_dry": 17,
+      "variable_excursion": 16,
+      "warm_humid": 16
+    }
+  },
+  "status_counts": {
+    "acceptable": 5058,
+    "spoiled": 8355,
+    "warning": 6587
+  },
+  "event_censored_by_crop": {
+    "maize": {
+      "events": 66,
+      "censored": 34
+    },
+    "onion": {
+      "events": 98,
+      "censored": 2
+    },
+    "potato": {
+      "events": 96,
+      "censored": 4
+    },
+    "spinach": {
+      "events": 100,
+      "censored": 0
+    },
+    "wheat": {
+      "events": 52,
+      "censored": 48
+    }
+  },
+  "age_ranges_days": {
+    "maize": [
+      0.0,
+      273.0
+    ],
+    "onion": [
+      0.0,
+      78.0
+    ],
+    "potato": [
+      0.0,
+      78.0
+    ],
+    "spinach": [
+      0.0,
+      9.75
+    ],
+    "wheat": [
+      0.0,
+      273.0
+    ]
+  },
+  "synthetic_assumptions": [
+    "One generated storage trajectory per unique simulated lot; there are no branched counterfactual paths.",
+    "Temperature, relative humidity, crop susceptibility, and inspection noise are generated from stated distributions, not measured paired data.",
+    "Nine MQ fields are dimensionless response indices with synthetic cross-sensitivity, calibration offsets, drift, and noise; they are not gas concentrations or calibrated real-device outputs.",
+    "AeroSense-named fields are illustrative synthetic values and do not reproduce or validate the AeroSense firmware.",
+    "Synthetic status is derived from the generated inspection defect percentage using assumed thresholds: acceptable <7%, warning 7-<15%, spoiled >=15%; these are not crop standards.",
+    "Failure/censoring targets are generated from these synthetic inspections and cannot validate true crop shelf life.",
+    "The fictional timestamps exist for schema compatibility only and must never be model inputs."
+  ],
+  "csv_path": "data\\simulated_paired_v2.csv"
+}

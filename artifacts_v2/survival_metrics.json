@@ -1,0 +1,697 @@
+{
+  "warning": "SIMULATION ONLY: no result is validated crop shelf-life performance.",
+  "split": {
+    "train_lots": 400,
+    "test_lots": 100,
+    "test_ids_unchanged": true,
+    "risk_rows_train": 9360,
+    "risk_rows_test": 2197
+  },
+  "per_crop_event_censoring": {
+    "maize": {
+      "train": {
+        "trajectories": 80,
+        "events": 52,
+        "right_censored": 28
+      },
+      "test": {
+        "trajectories": 20,
+        "events": 14,
+        "right_censored": 6
+      }
+    },
+    "onion": {
+      "train": {
+        "trajectories": 80,
+        "events": 79,
+        "right_censored": 1
+      },
+      "test": {
+        "trajectories": 20,
+        "events": 19,
+        "right_censored": 1
+      }
+    },
+    "potato": {
+      "train": {
+        "trajectories": 80,
+        "events": 76,
+        "right_censored": 4
+      },
+      "test": {
+        "trajectories": 20,
+        "events": 20,
+        "right_censored": 0
+      }
+    },
+    "spinach": {
+      "train": {
+        "trajectories": 80,
+        "events": 80,
+        "right_censored": 0
+      },
+      "test": {
+        "trajectories": 20,
+        "events": 20,
+        "right_censored": 0
+      }
+    },
+    "wheat": {
+      "train": {
+        "trajectories": 80,
+        "events": 36,
+        "right_censored": 44
+      },
+      "test": {
+        "trajectories": 20,
+        "events": 16,
+        "right_censored": 4
+      }
+    }
+  },
+  "discrete_hazard_all_interval_metrics": {
+    "discrete_hazard_logistic": {
+      "all_observed_at_risk_intervals": {
+        "n": 2197,
+        "event_intervals": 89,
+        "brier": 0.14362473219831398,
+        "auc": 0.8718738673432403,
+        "note": "Conditional next-inspection discrimination only; AUC is not days-left accuracy."
+      }
+    },
+    "discrete_hazard_xgboost": {
+      "all_observed_at_risk_intervals": {
+        "n": 2197,
+        "event_intervals": 89,
+        "brier": 0.035268396766004344,
+        "auc": 0.8909504722512419,
+        "note": "Conditional next-inspection discrimination only; AUC is not days-left accuracy."
+      }
+    }
+  },
+  "crop_specific_calendar_horizons": {
+    "maize": {
+      "calendar_horizon_day": 154.0,
+      "landmark_start_day": 147.0,
+      "horizon_selection": {
+        "rule": "Training-only 25th percentile of recorded event endpoints, rounded up to the crop inspection cadence.",
+        "training_event_endpoint_q25_days": 150.5,
+        "selected_without_test_outcomes": true
+      },
+      "interval_days": 7.0,
+      "test_at_risk_lots_paths": 13,
+      "test_events_in_interval": 1,
+      "test_trajectory_events_by_horizon": 8,
+      "test_right_censored_trajectories": 6,
+      "censoring_note": "Hazard scores cover a fully observed next-inspection interval; no included row is censored before its next inspection. AFT uses IPCW at the stated absolute horizon.",
+      "crop_specific_baseline": {
+        "brier": 0.07203934403756188,
+        "censor_survival_at_horizon": 1.0,
+        "known_fraction": 1.0,
+        "calibration": {
+          "mean_predicted": 0.04477611940298508,
+          "observed_fraction": 0.07692307692307693
+        },
+        "calibration_bins": [
+          {
+            "n": 13,
+            "mean_predicted_event_probability": 0.04477611940298508,
+            "observed_event_fraction": 0.07692307692307693
+          }
+        ]
+      },
+      "discrete_hazard_logistic": {
+        "brier": 0.11178869031958899,
+        "censor_survival_at_horizon": 1.0,
+        "known_fraction": 1.0,
+        "calibration": {
+          "mean_predicted": 0.16886606510583657,
+          "observed_fraction": 0.07692307692307693
+        },
+        "calibration_bins": [
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.021001942938896182,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 2,
+            "mean_predicted_event_probability": 0.0384324236076804,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.09223491662553425,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 2,
+            "mean_predicted_event_probability": 0.15748332857283542,
+            "observed_event_fraction": 0.5
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.487905587773851,
+            "observed_event_fraction": 0.0
+          }
+        ]
+      },
+      "discrete_hazard_xgboost": {
+        "brier": 0.07656765139829767,
+        "censor_survival_at_horizon": 1.0,
+        "known_fraction": 1.0,
+        "calibration": {
+          "mean_predicted": 0.015395278111100197,
+          "observed_fraction": 0.07692307692307693
+        },
+        "calibration_bins": [
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.0029042126843705773,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 2,
+            "mean_predicted_event_probability": 0.004253809340298176,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.0070782459030548734,
+            "observed_event_fraction": 0.3333333333333333
+          },
+          {
+            "n": 2,
+            "mean_predicted_event_probability": 0.012660018168389797,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.04545452476789554,
+            "observed_event_fraction": 0.0
+          }
+        ]
+      }
+    },
+    "onion": {
+      "calendar_horizon_day": 26.0,
+      "landmark_start_day": 24.0,
+      "horizon_selection": {
+        "rule": "Training-only 25th percentile of recorded event endpoints, rounded up to the crop inspection cadence.",
+        "training_event_endpoint_q25_days": 26.0,
+        "selected_without_test_outcomes": true
+      },
+      "interval_days": 2.0,
+      "test_at_risk_lots_paths": 17,
+      "test_events_in_interval": 0,
+      "test_trajectory_events_by_horizon": 3,
+      "test_right_censored_trajectories": 1,
+      "censoring_note": "Hazard scores cover a fully observed next-inspection interval; no included row is censored before its next inspection. AFT uses IPCW at the stated absolute horizon.",
+      "crop_specific_baseline": {
+        "brier": 0.014692378328741967,
+        "censor_survival_at_horizon": 1.0,
+        "known_fraction": 1.0,
+        "calibration": {
+          "mean_predicted": 0.12121212121212122,
+          "observed_fraction": 0.0
+        },
+        "calibration_bins": [
+          {
+            "n": 17,
+            "mean_predicted_event_probability": 0.12121212121212122,
+            "observed_event_fraction": 0.0
+          }
+        ]
+      },
+      "discrete_hazard_logistic": {
+        "brier": 0.3022433201386501,
+        "censor_survival_at_horizon": 1.0,
+        "known_fraction": 1.0,
+        "calibration": {
+          "mean_predicted": 0.4912028401669322,
+          "observed_fraction": 0.0
+        },
+        "calibration_bins": [
+          {
+            "n": 4,
+            "mean_predicted_event_probability": 0.16388681411432934,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.35351589336111827,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.4664334733414334,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.6554357097190843,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 4,
+            "mean_predicted_event_probability": 0.8171864492789056,
+            "observed_event_fraction": 0.0
+          }
+        ]
+      },
+      "discrete_hazard_xgboost": {
+        "brier": 0.03421471072111088,
+        "censor_survival_at_horizon": 1.0,
+        "known_fraction": 1.0,
+        "calibration": {
+          "mean_predicted": 0.11142588406801224,
+          "observed_fraction": 0.0
+        },
+        "calibration_bins": [
+          {
+            "n": 4,
+            "mean_predicted_event_probability": 0.005210246366914362,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.02893767257531484,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.04461421196659406,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.07993089656035106,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 4,
+            "mean_predicted_event_probability": 0.35323768109083176,
+            "observed_event_fraction": 0.0
+          }
+        ]
+      }
+    },
+    "potato": {
+      "calendar_horizon_day": 26.0,
+      "landmark_start_day": 24.0,
+      "horizon_selection": {
+        "rule": "Training-only 25th percentile of recorded event endpoints, rounded up to the crop inspection cadence.",
+        "training_event_endpoint_q25_days": 26.0,
+        "selected_without_test_outcomes": true
+      },
+      "interval_days": 2.0,
+      "test_at_risk_lots_paths": 16,
+      "test_events_in_interval": 0,
+      "test_trajectory_events_by_horizon": 4,
+      "test_right_censored_trajectories": 0,
+      "censoring_note": "Hazard scores cover a fully observed next-inspection interval; no included row is censored before its next inspection. AFT uses IPCW at the stated absolute horizon.",
+      "crop_specific_baseline": {
+        "brier": 0.017013232514177693,
+        "censor_survival_at_horizon": 1.0,
+        "known_fraction": 1.0,
+        "calibration": {
+          "mean_predicted": 0.13043478260869565,
+          "observed_fraction": 0.0
+        },
+        "calibration_bins": [
+          {
+            "n": 16,
+            "mean_predicted_event_probability": 0.13043478260869565,
+            "observed_event_fraction": 0.0
+          }
+        ]
+      },
+      "discrete_hazard_logistic": {
+        "brier": 0.2578215805979358,
+        "censor_survival_at_horizon": 1.0,
+        "known_fraction": 1.0,
+        "calibration": {
+          "mean_predicted": 0.46946198368106096,
+          "observed_fraction": 0.0
+        },
+        "calibration_bins": [
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.20838207254180327,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.3188853716252048,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.4170247001524188,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.6071712367707753,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 4,
+            "mean_predicted_event_probability": 0.7142503989065921,
+            "observed_event_fraction": 0.0
+          }
+        ]
+      },
+      "discrete_hazard_xgboost": {
+        "brier": 0.007833227027779536,
+        "censor_survival_at_horizon": 1.0,
+        "known_fraction": 1.0,
+        "calibration": {
+          "mean_predicted": 0.0600120984017849,
+          "observed_fraction": 0.0
+        },
+        "calibration_bins": [
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.004967579850926995,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.019682585261762142,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 4,
+            "mean_predicted_event_probability": 0.032602034974843264,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 2,
+            "mean_predicted_event_probability": 0.08214706182479858,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 4,
+            "mean_predicted_event_probability": 0.14788520149886608,
+            "observed_event_fraction": 0.0
+          }
+        ]
+      }
+    },
+    "spinach": {
+      "calendar_horizon_day": 2.25,
+      "landmark_start_day": 2.0,
+      "horizon_selection": {
+        "rule": "Training-only 25th percentile of recorded event endpoints, rounded up to the crop inspection cadence.",
+        "training_event_endpoint_q25_days": 2.25,
+        "selected_without_test_outcomes": true
+      },
+      "interval_days": 0.25,
+      "test_at_risk_lots_paths": 15,
+      "test_events_in_interval": 2,
+      "test_trajectory_events_by_horizon": 7,
+      "test_right_censored_trajectories": 0,
+      "censoring_note": "Hazard scores cover a fully observed next-inspection interval; no included row is censored before its next inspection. AFT uses IPCW at the stated absolute horizon.",
+      "crop_specific_baseline": {
+        "brier": 0.11559586797682034,
+        "censor_survival_at_horizon": 1.0,
+        "known_fraction": 1.0,
+        "calibration": {
+          "mean_predicted": 0.12698412698412698,
+          "observed_fraction": 0.13333333333333333
+        },
+        "calibration_bins": [
+          {
+            "n": 15,
+            "mean_predicted_event_probability": 0.12698412698412698,
+            "observed_event_fraction": 0.13333333333333333
+          }
+        ]
+      },
+      "discrete_hazard_logistic": {
+        "brier": 0.32887526284958846,
+        "censor_survival_at_horizon": 1.0,
+        "known_fraction": 1.0,
+        "calibration": {
+          "mean_predicted": 0.6058355997263795,
+          "observed_fraction": 0.13333333333333333
+        },
+        "calibration_bins": [
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.23816356436003594,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.4850592386923916,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.645106753849442,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.7744662431133021,
+            "observed_event_fraction": 0.3333333333333333
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.8863821986167254,
+            "observed_event_fraction": 0.3333333333333333
+          }
+        ]
+      },
+      "discrete_hazard_xgboost": {
+        "brier": 0.07241334861187411,
+        "censor_survival_at_horizon": 1.0,
+        "known_fraction": 1.0,
+        "calibration": {
+          "mean_predicted": 0.08966705948114395,
+          "observed_fraction": 0.13333333333333333
+        },
+        "calibration_bins": [
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.004254980633656184,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.018283722922205925,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.05100044856468836,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.11031304051478703,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.2644830644130707,
+            "observed_event_fraction": 0.6666666666666666
+          }
+        ]
+      }
+    },
+    "wheat": {
+      "calendar_horizon_day": 203.0,
+      "landmark_start_day": 196.0,
+      "horizon_selection": {
+        "rule": "Training-only 25th percentile of recorded event endpoints, rounded up to the crop inspection cadence.",
+        "training_event_endpoint_q25_days": 203.0,
+        "selected_without_test_outcomes": true
+      },
+      "interval_days": 7.0,
+      "test_at_risk_lots_paths": 12,
+      "test_events_in_interval": 1,
+      "test_trajectory_events_by_horizon": 9,
+      "test_right_censored_trajectories": 4,
+      "censoring_note": "Hazard scores cover a fully observed next-inspection interval; no included row is censored before its next inspection. AFT uses IPCW at the stated absolute horizon.",
+      "crop_specific_baseline": {
+        "brier": 0.07812500000000001,
+        "censor_survival_at_horizon": 1.0,
+        "known_fraction": 1.0,
+        "calibration": {
+          "mean_predicted": 0.041666666666666664,
+          "observed_fraction": 0.08333333333333333
+        },
+        "calibration_bins": [
+          {
+            "n": 12,
+            "mean_predicted_event_probability": 0.041666666666666664,
+            "observed_event_fraction": 0.08333333333333333
+          }
+        ]
+      },
+      "discrete_hazard_logistic": {
+        "brier": 0.12857313657599706,
+        "censor_survival_at_horizon": 1.0,
+        "known_fraction": 1.0,
+        "calibration": {
+          "mean_predicted": 0.3330320729315619,
+          "observed_fraction": 0.08333333333333333
+        },
+        "calibration_bins": [
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.006722151334128487,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 2,
+            "mean_predicted_event_probability": 0.13518698512959063,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 2,
+            "mean_predicted_event_probability": 0.27074321718819694,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 2,
+            "mean_predicted_event_probability": 0.4131182223643443,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.7793738572706977,
+            "observed_event_fraction": 0.3333333333333333
+          }
+        ]
+      },
+      "discrete_hazard_xgboost": {
+        "brier": 0.05246064359141563,
+        "censor_survival_at_horizon": 1.0,
+        "known_fraction": 1.0,
+        "calibration": {
+          "mean_predicted": 0.03856420889496803,
+          "observed_fraction": 0.08333333333333333
+        },
+        "calibration_bins": [
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.00183503325873365,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 2,
+            "mean_predicted_event_probability": 0.006315614795312285,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 2,
+            "mean_predicted_event_probability": 0.01151349674910307,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 2,
+            "mean_predicted_event_probability": 0.023969831876456738,
+            "observed_event_fraction": 0.0
+          },
+          {
+            "n": 3,
+            "mean_predicted_event_probability": 0.12455583115418752,
+            "observed_event_fraction": 0.3333333333333333
+          }
+        ]
+      }
+    }
+  },
+  "xgboost_aft_interval_censored": {
+    "test_trajectories": 100,
+    "test_observed_events": 89,
+    "test_right_censored": 11,
+    "observed_failure_interval_distance_days": {
+      "median": 6.109369277954102,
+      "mae": 55.66943036304431,
+      "limitation": "Only observed failures; prediction is compared with an interval, not an exact event day. Censored cases are not timed-error cases."
+    },
+    "per_crop_event_censoring": {
+      "maize": {
+        "test_trajectories": 20,
+        "events": 14,
+        "censored": 6
+      },
+      "onion": {
+        "test_trajectories": 20,
+        "events": 19,
+        "censored": 1
+      },
+      "potato": {
+        "test_trajectories": 20,
+        "events": 20,
+        "censored": 0
+      },
+      "spinach": {
+        "test_trajectories": 20,
+        "events": 20,
+        "censored": 0
+      },
+      "wheat": {
+        "test_trajectories": 20,
+        "events": 16,
+        "censored": 4
+      }
+    },
+    "calendar_horizon_ipcw_brier": {
+      "maize": {
+        "brier": 0.2021220774007344,
+        "known_fraction": 1.0,
+        "censor_survival_at_horizon": 1.0
+      },
+      "onion": {
+        "brier": 0.16079674685503814,
+        "known_fraction": 1.0,
+        "censor_survival_at_horizon": 1.0
+      },
+      "potato": {
+        "brier": 0.18523725014518727,
+        "known_fraction": 1.0,
+        "censor_survival_at_horizon": 1.0
+      },
+      "spinach": {
+        "brier": 0.21708698125480974,
+        "known_fraction": 1.0,
+        "censor_survival_at_horizon": 1.0
+      },
+      "wheat": {
+        "brier": 0.21607316968779502,
+        "known_fraction": 1.0,
+        "censor_survival_at_horizon": 1.0
+      }
+    },
+    "calendar_horizon_calibration": {
+      "maize": {
+        "mean_predicted_event_probability": 0.24733910689179622,
+        "observed_event_fraction_by_horizon": 0.4
+      },
+      "onion": {
+        "mean_predicted_event_probability": 0.4016653059827561,
+        "observed_event_fraction_by_horizon": 0.15
+      },
+      "potato": {
+        "mean_predicted_event_probability": 0.4034356742509619,
+        "observed_event_fraction_by_horizon": 0.2
+      },
+      "spinach": {
+        "mean_predicted_event_probability": 0.40487326030311904,
+        "observed_event_fraction_by_horizon": 0.35
+      },
+      "wheat": {
+        "mean_predicted_event_probability": 0.26816642422598247,
+        "observed_event_fraction_by_horizon": 0.45
+      }
+    }
+  },
+  "construction": "Each hazard row's predictors are the current interval-start readings and through-current history. Rows at/after the recorded failure upper bound are excluded; the event is attributed to the recorded inspection interval. Censored trajectories contribute only observed event-free intervals.",
+  "horizon_note": "For each crop, the absolute calendar endpoint is selected using only training-lot observed event endpoints: their 25th percentile rounded up to that crop's inspection cadence. The held-out evaluation uses a single supported next-inspection interval starting one cadence earlier; it does not use future rows as predictors or claim interpolation between inspections. AFT Brier evaluates baseline predictions by the same absolute horizon with IPCW. Future-path projections remain separate and require explicit future environment and all nine MQ channels."
+}
