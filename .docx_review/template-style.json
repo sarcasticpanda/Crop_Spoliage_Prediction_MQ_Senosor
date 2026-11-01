@@ -1,0 +1,130 @@
+{
+  "input": "C:\\Users\\Lunar Panda\\Downloads\\sample_urop.docx",
+  "fonts_by_char_count": {
+    "Book Antiqua": 358
+  },
+  "direct_run_formatting_runs": 37,
+  "direct_paragraph_formatting_paragraphs": 7,
+  "heading_like_paragraphs_not_heading_style": [
+    {
+      "para_index": 1,
+      "text": "Title of the Project",
+      "style": "Normal"
+    },
+    {
+      "para_index": 7,
+      "text": "Bachelor of Technology \nin",
+      "style": "Normal"
+    },
+    {
+      "para_index": 8,
+      "text": "Computer Science and Engineering",
+      "style": "Normal"
+    },
+    {
+      "para_index": 9,
+      "text": "School of Engineering and Sciences",
+      "style": "Normal"
+    },
+    {
+      "para_index": 12,
+      "text": "Student Name | AP21110010489",
+      "style": "Normal"
+    },
+    {
+      "para_index": 15,
+      "text": "Dr. Mentor Name",
+      "style": "Normal"
+    },
+    {
+      "para_index": 16,
+      "text": "SRM University\u2013AP",
+      "style": "Normal"
+    },
+    {
+      "para_index": 17,
+      "text": "Neerukonda, Mangalagiri, ",
+      "style": "Normal"
+    },
+    {
+      "para_index": 18,
+      "text": "Guntur Andhra Pradesh \u2013 522 240",
+      "style": "Normal"
+    },
+    {
+      "para_index": 19,
+      "text": "November, 2026",
+      "style": "Normal"
+    },
+    {
+      "para_index": 33,
+      "text": "Literature Survey",
+      "style": "List Paragraph"
+    },
+    {
+      "para_index": 37,
+      "text": "System Model",
+      "style": "List Paragraph"
+    }
+  ],
+  "examples": {
+    "direct_run_formatting": [
+      {
+        "para_index": 1,
+        "run_text": "Title of the Project",
+        "style": "Normal"
+      },
+      {
+        "para_index": 7,
+        "run_text": "Bachelor of Technology ",
+        "style": "Normal"
+      },
+      {
+        "para_index": 7,
+        "run_text": "\n",
+        "style": "Normal"
+      },
+      {
+        "para_index": 7,
+        "run_text": "in",
+        "style": "Normal"
+      },
+      {
+        "para_index": 8,
+        "run_text": "Computer Science and Engineering",
+        "style": "Normal"
+      }
+    ],
+    "direct_paragraph_formatting": [
+      {
+        "para_index": 13,
+        "text": "",
+        "style": "Normal"
+      },
+      {
+        "para_index": 16,
+        "text": "SRM University\u2013AP",
+        "style": "Normal"
+      },
+      {
+        "para_index": 23,
+        "text": "Acknowledgements:",
+        "style": "Heading 1"
+      },
+      {
+        "para_index": 41,
+        "text": "Concluding Remarks:",
+        "style": "Heading 1"
+      },
+      {
+        "para_index": 44,
+        "text": "",
+        "style": "Heading 1"
+      }
+    ]
+  },
+  "notes": [
+    "Direct formatting is not always wrong, but it often causes inconsistent output when templates change.",
+    "Heading-like paragraphs not using Heading styles can break TOC and accessibility."
+  ]
+}
