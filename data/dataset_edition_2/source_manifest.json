@@ -1,0 +1,126 @@
+{
+  "edition": "2 originals organization",
+  "created_by": "data/fetch_edition_2_originals.py",
+  "no_cross_study_join": true,
+  "no_synthetic_values_added": true,
+  "files": [
+    {
+      "path": "potato\\original\\mendeley_potato_environment\\source_archive.zip",
+      "bytes": 4511437,
+      "sha256": "d1d6ada13d733018ee3b7f28d3e50b5fcf59d351f04d98e8b0ed2b320b928645",
+      "source_url": "https://data.mendeley.com/datasets/sbwxmtpj47/1",
+      "description": "Potato storage environment archive; temperature/RH/core temperature/CO2 and separate quality summaries; not MQ-paired.",
+      "copied_from_project_source": "data\\real_sources\\raw\\mendeley_potato_storage_environment.zip"
+    },
+    {
+      "path": "tomato\\original\\zenodo_tomato_12_channel_enose\\source_archive.zip",
+      "bytes": 15443,
+      "sha256": "0261e0a8b47835008fa907d7784d4611fea58e69c3c69a38f9c40e9692f33df8",
+      "source_url": "https://zenodo.org/records/15469472",
+      "description": "Tomato measurements with 12 Rs/R0 channels, weight, color, storage day and scenario; released CSVs omit temperature/RH and lack inspected spoilage labels.",
+      "copied_from_project_source": "data\\real_sources\\raw\\zenodo_15469472_tomato_sensor_lab.zip"
+    },
+    {
+      "path": "shared_sources\\zenodo_exact_nine_mq_food_freshness\\source_archive.zip",
+      "bytes": 10281838,
+      "sha256": "fde5a3836fe9ddb04fee90102b9c1a5816f48a78d37bf7125074e66a3f3b5f5a",
+      "source_url": "https://zenodo.org/records/17285312",
+      "description": "Exact nine-MQ short recordings across foods; no verified lot IDs, matched environment history or independent spoilage labels.",
+      "copied_from_project_source": "data\\real_sources\\raw\\zenodo_17285312_nine_mq_food_freshness.zip",
+      "tomato_recordings_extracted": [
+        "tomato\\original\\zenodo_exact_nine_mq_tomato_recordings\\AllSmaples-Report\\Tomato D1.csv",
+        "tomato\\original\\zenodo_exact_nine_mq_tomato_recordings\\AllSmaples-Report\\Tomato D2.csv",
+        "tomato\\original\\zenodo_exact_nine_mq_tomato_recordings\\AllSmaples-Report\\Tomato D3.csv",
+        "tomato\\original\\zenodo_exact_nine_mq_tomato_recordings\\AllSmaples-Report\\Tomato D4.csv",
+        "tomato\\original\\zenodo_exact_nine_mq_tomato_recordings\\AllSmaples-Report\\tomato D5.csv"
+      ],
+      "banana_recordings_extracted": [
+        "banana\\original\\zenodo_exact_nine_mq_banana_recordings\\AllSmaples-Report\\Banana D1.csv",
+        "banana\\original\\zenodo_exact_nine_mq_banana_recordings\\AllSmaples-Report\\Banana D2.csv",
+        "banana\\original\\zenodo_exact_nine_mq_banana_recordings\\AllSmaples-Report\\Banana D3.csv",
+        "banana\\original\\zenodo_exact_nine_mq_banana_recordings\\AllSmaples-Report\\Banana D4.csv",
+        "banana\\original\\zenodo_exact_nine_mq_banana_recordings\\AllSmaples-Report\\Banana D5.csv"
+      ]
+    },
+    {
+      "path": "wheat\\original\\mendeley_wheat_silo_insect_storage\\source_archive_v3.zip",
+      "bytes": 2748119,
+      "sha256": "b96df1e2b24143ad9e84566b5ffdb0fe6bdd81492552cf02c8a92647769664e5",
+      "content_type": "application/zip",
+      "source_url": "https://data.mendeley.com/public-api/zip/53ckhtd8gj/download/3"
+    },
+    {
+      "path": "maize\\original\\cimmyt_maize_storage_quality\\DAT-PostharvestLoss-SeedGermination-2022-07-26.xlsx",
+      "bytes": 75337,
+      "sha256": "ff7e33c5aa10a28cd796dfeba78476f2b66c8e42c275e4e7a2e4a7e260fb6492",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "source_url": "https://data.cimmyt.org/api/access/datafile/20789"
+    },
+    {
+      "path": "onion\\original\\plos_onion_microclimate_quality\\S1_Dataset_all_microclimate_and_quality.xlsx",
+      "bytes": 184245,
+      "sha256": "44bf5e796f68a365515d7c6fd15a99f7a089eca6bb8ca7eda0f1a1222f6fc0d0",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "source_url": "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0210577.s003&type=supplementary"
+    },
+    {
+      "path": "spinach\\original\\mendeley_realtime_shelf_life_model\\source_archive_v4.zip",
+      "bytes": 12178267,
+      "sha256": "c9463167246f6221c456b6c4a1c2f614e338e719817aa930492d48a77b9e34fa",
+      "content_type": "application/zip",
+      "source_url": "https://data.mendeley.com/public-api/zip/kphtgxn3ff/download/4"
+    },
+    {
+      "path": "banana\\original\\bath_multisensor_banana_ripeness\\ds_34.zip",
+      "bytes": 2428359,
+      "sha256": "c5594a0b28e91534e40d73675d40258672c9f9c7114724d44acb9c34cb42904d",
+      "content_type": "application/zip",
+      "source_url": "https://researchdata.bath.ac.uk/1459/1/ds_34.zip"
+    },
+    {
+      "path": "banana\\original\\bath_multisensor_banana_ripeness\\Spect.zip",
+      "bytes": 723929,
+      "sha256": "b998170eed7aaf7b8a7a55e75cd2e071b41a4663d7f284e0022326f92e311313",
+      "content_type": "application/zip",
+      "source_url": "https://researchdata.bath.ac.uk/1459/2/Spect.zip"
+    },
+    {
+      "path": "banana\\original\\bath_multisensor_banana_ripeness\\TPHiS.zip",
+      "bytes": 1723224,
+      "sha256": "e2018ac7440e6698478d0377d08ce6a9fe4bfc6b30fbecb64f0d68a12eaf2897",
+      "content_type": "application/zip",
+      "source_url": "https://researchdata.bath.ac.uk/1459/3/TPHiS.zip"
+    },
+    {
+      "path": "banana\\original\\bath_multisensor_banana_ripeness\\VOC.zip",
+      "bytes": 592516,
+      "sha256": "e9d6287d97897054cf9286835b898b9ede2b988a5a76dadfa7ac993eaded246e",
+      "content_type": "application/zip",
+      "source_url": "https://researchdata.bath.ac.uk/1459/4/VOC.zip"
+    },
+    {
+      "path": "shared_sources\\github_reference_tables\\github_environment_fruit_spoilage_Dataset.csv",
+      "bytes": 385517,
+      "sha256": "218f76f061a12b0a38c55107e5be3b377e9eecb33f1a1840ef2b4e4618a5e5aa",
+      "source_url": "https://github.com/SdIshtiyaqAhmed/fruit-spoilage-prediction-iot-ml",
+      "description": "Environment-only fruit table; Good/Bad is not verified inspection spoilage.",
+      "copied_from_project_source": "data\\real_sources\\raw\\github_environment_fruit_spoilage_Dataset.csv"
+    },
+    {
+      "path": "shared_sources\\github_reference_tables\\github_intellistore_environment_Dataset.csv",
+      "bytes": 6532,
+      "sha256": "a73396334d62c158ed6a3db3996afbecfd0f8b956108da082d403d4188fa022d",
+      "source_url": "https://github.com/shivamsingha/aiot-food-storage",
+      "description": "Small sensor table with uncertain physical lot/time and target provenance.",
+      "copied_from_project_source": "data\\real_sources\\raw\\github_intellistore_environment_Dataset.csv"
+    },
+    {
+      "path": "shared_sources\\github_reference_tables\\github_intellistore_fruit_reference.csv",
+      "bytes": 2474,
+      "sha256": "89f4e62c06fd8da40ebb47c8c84a9b6e29c89e8af12770e157cdc14d21374fde",
+      "source_url": "https://github.com/shivamsingha/aiot-food-storage",
+      "description": "Reference table, not paired sensor/inspection records.",
+      "copied_from_project_source": "data\\real_sources\\raw\\github_intellistore_fruit_reference.csv"
+    }
+  ]
+}
