@@ -1,0 +1,1597 @@
+{
+  "interpretation": "All generated data, labels, and scores are SIMULATION ONLY; not real crop accuracy.",
+  "version": "edition2_simulation_v3",
+  "seed": 20261102,
+  "lots_per_crop": 100,
+  "observations_per_lot": 8,
+  "split": "80/20 by sim_sample_id within crop; all times kept together",
+  "label_thresholds_SIM": {
+    "acceptable": "latent severity < 0.32",
+    "warning": "0.32 to < 0.58",
+    "high_risk": ">= 0.58"
+  },
+  "models": {
+    "tomato__environment_only__random_forest": {
+      "macro_f1": 0.7571399639508273,
+      "accuracy": 0.78125,
+      "spoiled_recall": 0.7777777777777778,
+      "log_loss": 0.5376896812218952,
+      "multiclass_brier": 0.3180572462082915,
+      "class_recall": {
+        "acceptable": 0.8148148148148148,
+        "warning": 0.7307692307692307,
+        "high_risk": 0.7777777777777778
+      },
+      "confusion_matrix_true_rows_pred_columns": [
+        [
+          66,
+          13,
+          2
+        ],
+        [
+          4,
+          38,
+          10
+        ],
+        [
+          0,
+          6,
+          21
+        ]
+      ],
+      "features": [
+        "storage_age_days_SIM",
+        "temperature_C_SIM",
+        "relative_humidity_pct_SIM"
+      ],
+      "test_lots": 20,
+      "test_rows": 160,
+      "model": "artifacts\\edition2_simulation_v3\\tomato__environment_only__random_forest.joblib"
+    },
+    "tomato__environment_only__xgboost": {
+      "macro_f1": 0.7655763290171893,
+      "accuracy": 0.79375,
+      "spoiled_recall": 0.7037037037037037,
+      "log_loss": 0.5075254387955209,
+      "multiclass_brier": 0.3065408578707439,
+      "class_recall": {
+        "acceptable": 0.8518518518518519,
+        "warning": 0.75,
+        "high_risk": 0.7037037037037037
+      },
+      "confusion_matrix_true_rows_pred_columns": [
+        [
+          69,
+          12,
+          0
+        ],
+        [
+          5,
+          39,
+          8
+        ],
+        [
+          0,
+          8,
+          19
+        ]
+      ],
+      "features": [
+        "storage_age_days_SIM",
+        "temperature_C_SIM",
+        "relative_humidity_pct_SIM"
+      ],
+      "test_lots": 20,
+      "test_rows": 160,
+      "model": "artifacts\\edition2_simulation_v3\\tomato__environment_only__xgboost.joblib"
+    },
+    "tomato__mq_only__random_forest": {
+      "macro_f1": 0.564585511930792,
+      "accuracy": 0.6,
+      "spoiled_recall": 0.7037037037037037,
+      "log_loss": 0.7665365399911913,
+      "multiclass_brier": 0.47207308179950347,
+      "class_recall": {
+        "acceptable": 0.7283950617283951,
+        "warning": 0.34615384615384615,
+        "high_risk": 0.7037037037037037
+      },
+      "confusion_matrix_true_rows_pred_columns": [
+        [
+          59,
+          18,
+          4
+        ],
+        [
+          17,
+          18,
+          17
+        ],
+        [
+          0,
+          8,
+          19
+        ]
+      ],
+      "features": [
+        "MQ2_response_SIM",
+        "MQ3_response_SIM",
+        "MQ4_response_SIM",
+        "MQ5_response_SIM",
+        "MQ6_response_SIM",
+        "MQ7_response_SIM",
+        "MQ8_response_SIM",
+        "MQ9_response_SIM",
+        "MQ135_response_SIM"
+      ],
+      "test_lots": 20,
+      "test_rows": 160,
+      "model": "artifacts\\edition2_simulation_v3\\tomato__mq_only__random_forest.joblib"
+    },
+    "tomato__mq_only__xgboost": {
+      "macro_f1": 0.6004144004144004,
+      "accuracy": 0.6375,
+      "spoiled_recall": 0.7407407407407407,
+      "log_loss": 0.775393256664231,
+      "multiclass_brier": 0.47424683727671846,
+      "class_recall": {
+        "acceptable": 0.7777777777777778,
+        "warning": 0.36538461538461536,
+        "high_risk": 0.7407407407407407
+      },
+      "confusion_matrix_true_rows_pred_columns": [
+        [
+          63,
+          14,
+          4
+        ],
+        [
+          19,
+          19,
+          14
+        ],
+        [
+          2,
+          5,
+          20
+        ]
+      ],
+      "features": [
+        "MQ2_response_SIM",
+        "MQ3_response_SIM",
+        "MQ4_response_SIM",
+        "MQ5_response_SIM",
+        "MQ6_response_SIM",
+        "MQ7_response_SIM",
+        "MQ8_response_SIM",
+        "MQ9_response_SIM",
+        "MQ135_response_SIM"
+      ],
+      "test_lots": 20,
+      "test_rows": 160,
+      "model": "artifacts\\edition2_simulation_v3\\tomato__mq_only__xgboost.joblib"
+    },
+    "tomato__combined__random_forest": {
+      "macro_f1": 0.7873721815770334,
+      "accuracy": 0.825,
+      "spoiled_recall": 0.6296296296296297,
+      "log_loss": 0.5463254309854403,
+      "multiclass_brier": 0.3181441896267352,
+      "class_recall": {
+        "acceptable": 0.9012345679012346,
+        "warning": 0.8076923076923077,
+        "high_risk": 0.6296296296296297
+      },
+      "confusion_matrix_true_rows_pred_columns": [
+        [
+          73,
+          8,
+          0
+        ],
+        [
+          5,
+          42,
+          5
+        ],
+        [
+          0,
+          10,
+          17
+        ]
+      ],
+      "features": [
+        "storage_age_days_SIM",
+        "temperature_C_SIM",
+        "relative_humidity_pct_SIM",
+        "MQ2_response_SIM",
+        "MQ3_response_SIM",
+        "MQ4_response_SIM",
+        "MQ5_response_SIM",
+        "MQ6_response_SIM",
+        "MQ7_response_SIM",
+        "MQ8_response_SIM",
+        "MQ9_response_SIM",
+        "MQ135_response_SIM"
+      ],
+      "test_lots": 20,
+      "test_rows": 160,
+      "model": "artifacts\\edition2_simulation_v3\\tomato__combined__random_forest.joblib"
+    },
+    "tomato__combined__xgboost": {
+      "macro_f1": 0.7458977719528178,
+      "accuracy": 0.76875,
+      "spoiled_recall": 0.6666666666666666,
+      "log_loss": 0.4684117171295985,
+      "multiclass_brier": 0.29185608545554137,
+      "class_recall": {
+        "acceptable": 0.8518518518518519,
+        "warning": 0.6923076923076923,
+        "high_risk": 0.6666666666666666
+      },
+      "confusion_matrix_true_rows_pred_columns": [
+        [
+          69,
+          12,
+          0
+        ],
+        [
+          11,
+          36,
+          5
+        ],
+        [
+          0,
+          9,
+          18
+        ]
+      ],
+      "features": [
+        "storage_age_days_SIM",
+        "temperature_C_SIM",
+        "relative_humidity_pct_SIM",
+        "MQ2_response_SIM",
+        "MQ3_response_SIM",
+        "MQ4_response_SIM",
+        "MQ5_response_SIM",
+        "MQ6_response_SIM",
+        "MQ7_response_SIM",
+        "MQ8_response_SIM",
+        "MQ9_response_SIM",
+        "MQ135_response_SIM"
+      ],
+      "test_lots": 20,
+      "test_rows": 160,
+      "model": "artifacts\\edition2_simulation_v3\\tomato__combined__xgboost.joblib"
+    },
+    "potato__environment_only__random_forest": {
+      "macro_f1": 0.6349800560835885,
+      "accuracy": 0.68125,
+      "spoiled_recall": 0.48,
+      "log_loss": 0.6863722631876018,
+      "multiclass_brier": 0.41510463779681295,
+      "class_recall": {
+        "acceptable": 0.8266666666666667,
+        "warning": 0.5833333333333334,
+        "high_risk": 0.48
+      },
+      "confusion_matrix_true_rows_pred_columns": [
+        [
+          62,
+          13,
+          0
+        ],
+        [
+          15,
+          35,
+          10
+        ],
+        [
+          0,
+          13,
+          12
+        ]
+      ],
+      "features": [
+        "storage_age_days_SIM",
+        "temperature_C_SIM",
+        "relative_humidity_pct_SIM"
+      ],
+      "test_lots": 20,
+      "test_rows": 160,
+      "model": "artifacts\\edition2_simulation_v3\\potato__environment_only__random_forest.joblib"
+    },
+    "potato__environment_only__xgboost": {
+      "macro_f1": 0.6544733740490732,
+      "accuracy": 0.7,
+      "spoiled_recall": 0.48,
+      "log_loss": 0.7007934297169418,
+      "multiclass_brier": 0.42299715223891077,
+      "class_recall": {
+        "acceptable": 0.84,
+        "warning": 0.6166666666666667,
+        "high_risk": 0.48
+      },
+      "confusion_matrix_true_rows_pred_columns": [
+        [
+          63,
+          12,
+          0
+        ],
+        [
+          15,
+          37,
+          8
+        ],
+        [
+          0,
+          13,
+          12
+        ]
+      ],
+      "features": [
+        "storage_age_days_SIM",
+        "temperature_C_SIM",
+        "relative_humidity_pct_SIM"
+      ],
+      "test_lots": 20,
+      "test_rows": 160,
+      "model": "artifacts\\edition2_simulation_v3\\potato__environment_only__xgboost.joblib"
+    },
+    "potato__mq_only__random_forest": {
+      "macro_f1": 0.5156776068626097,
+      "accuracy": 0.55625,
+      "spoiled_recall": 0.4,
+      "log_loss": 0.8910903751376477,
+      "multiclass_brier": 0.5492920544863178,
+      "class_recall": {
+        "acceptable": 0.6133333333333333,
+        "warning": 0.55,
+        "high_risk": 0.4
+      },
+      "confusion_matrix_true_rows_pred_columns": [
+        [
+          46,
+          21,
+          8
+        ],
+        [
+          13,
+          33,
+          14
+        ],
+        [
+          2,
+          13,
+          10
+        ]
+      ],
+      "features": [
+        "MQ2_response_SIM",
+        "MQ3_response_SIM",
+        "MQ4_response_SIM",
+        "MQ5_response_SIM",
+        "MQ6_response_SIM",
+        "MQ7_response_SIM",
+        "MQ8_response_SIM",
+        "MQ9_response_SIM",
+        "MQ135_response_SIM"
+      ],
+      "test_lots": 20,
+      "test_rows": 160,
+      "model": "artifacts\\edition2_simulation_v3\\potato__mq_only__random_forest.joblib"
+    },
+    "potato__mq_only__xgboost": {
+      "macro_f1": 0.49379541842983904,
+      "accuracy": 0.54375,
+      "spoiled_recall": 0.32,
+      "log_loss": 0.9460670002770417,
+      "multiclass_brier": 0.5926521939624217,
+      "class_recall": {
+        "acceptable": 0.64,
+        "warning": 0.5166666666666667,
+        "high_risk": 0.32
+      },
+      "confusion_matrix_true_rows_pred_columns": [
+        [
+          48,
+          22,
+          5
+        ],
+        [
+          18,
+          31,
+          11
+        ],
+        [
+          3,
+          14,
+          8
+        ]
+      ],
+      "features": [
+        "MQ2_response_SIM",
+        "MQ3_response_SIM",
+        "MQ4_response_SIM",
+        "MQ5_response_SIM",
+        "MQ6_response_SIM",
+        "MQ7_response_SIM",
+        "MQ8_response_SIM",
+        "MQ9_response_SIM",
+        "MQ135_response_SIM"
+      ],
+      "test_lots": 20,
+      "test_rows": 160,
+      "model": "artifacts\\edition2_simulation_v3\\potato__mq_only__xgboost.joblib"
+    },
+    "potato__combined__random_forest": {
+      "macro_f1": 0.6141972491388547,
+      "accuracy": 0.66875,
+      "spoiled_recall": 0.4,
+      "log_loss": 0.6839319635933488,
+      "multiclass_brier": 0.41985849867202907,
+      "class_recall": {
+        "acceptable": 0.8,
+        "warning": 0.6166666666666667,
+        "high_risk": 0.4
+      },
+      "confusion_matrix_true_rows_pred_columns": [
+        [
+          60,
+          15,
+          0
+        ],
+        [
+          14,
+          37,
+          9
+        ],
+        [
+          0,
+          15,
+          10
+        ]
+      ],
+      "features": [
+        "storage_age_days_SIM",
+        "temperature_C_SIM",
+        "relative_humidity_pct_SIM",
+        "MQ2_response_SIM",
+        "MQ3_response_SIM",
+        "MQ4_response_SIM",
+        "MQ5_response_SIM",
+        "MQ6_response_SIM",
+        "MQ7_response_SIM",
+        "MQ8_response_SIM",
+        "MQ9_response_SIM",
+        "MQ135_response_SIM"
+      ],
+      "test_lots": 20,
+      "test_rows": 160,
+      "model": "artifacts\\edition2_simulation_v3\\potato__combined__random_forest.joblib"
+    },
+    "potato__combined__xgboost": {
+      "macro_f1": 0.5799873835908641,
+      "accuracy": 0.65,
+      "spoiled_recall": 0.32,
+      "log_loss": 0.7122652444585782,
+      "multiclass_brier": 0.444669128383532,
+      "class_recall": {
+        "acceptable": 0.8,
+        "warning": 0.6,
+        "high_risk": 0.32
+      },
+      "confusion_matrix_true_rows_pred_columns": [
+        [
+          60,
+          15,
+          0
+        ],
+        [
+          14,
+          36,
+          10
+        ],
+        [
+          0,
+          17,
+          8
+        ]
+      ],
+      "features": [
+        "storage_age_days_SIM",
+        "temperature_C_SIM",
+        "relative_humidity_pct_SIM",
+        "MQ2_response_SIM",
+        "MQ3_response_SIM",
+        "MQ4_response_SIM",
+        "MQ5_response_SIM",
+        "MQ6_response_SIM",
+        "MQ7_response_SIM",
+        "MQ8_response_SIM",
+        "MQ9_response_SIM",
+        "MQ135_response_SIM"
+      ],
+      "test_lots": 20,
+      "test_rows": 160,
+      "model": "artifacts\\edition2_simulation_v3\\potato__combined__xgboost.joblib"
+    },
+    "banana__environment_only__random_forest": {
+      "macro_f1": 0.7110928287398876,
+      "accuracy": 0.7375,
+      "spoiled_recall": 0.5333333333333333,
+      "log_loss": 0.5261031213011729,
+      "multiclass_brier": 0.3289821300797232,
+      "class_recall": {
+        "acceptable": 0.759493670886076,
+        "warning": 0.8235294117647058,
+        "high_risk": 0.5333333333333333
+      },
+      "confusion_matrix_true_rows_pred_columns": [
+        [
+          60,
+          19,
+          0
+        ],
+        [
+          4,
+          42,
+          5
+        ],
+        [
+          0,
+          14,
+          16
+        ]
+      ],
+      "features": [
+        "storage_age_days_SIM",
+        "temperature_C_SIM",
+        "relative_humidity_pct_SIM"
+      ],
+      "test_lots": 20,
+      "test_rows": 160,
+      "model": "artifacts\\edition2_simulation_v3\\banana__environment_only__random_forest.joblib"
+    },
+    "banana__environment_only__xgboost": {
+      "macro_f1": 0.6931258070969971,
+      "accuracy": 0.73125,
+      "spoiled_recall": 0.4666666666666667,
+      "log_loss": 0.5238370029094238,
+      "multiclass_brier": 0.3296192890800388,
+      "class_recall": {
+        "acceptable": 0.7974683544303798,
+        "warning": 0.7843137254901961,
+        "high_risk": 0.4666666666666667
+      },
+      "confusion_matrix_true_rows_pred_columns": [
+        [
+          63,
+          16,
+          0
+        ],
+        [
+          7,
+          40,
+          4
+        ],
+        [
+          0,
+          16,
+          14
+        ]
+      ],
+      "features": [
+        "storage_age_days_SIM",
+        "temperature_C_SIM",
+        "relative_humidity_pct_SIM"
+      ],
+      "test_lots": 20,
+      "test_rows": 160,
+      "model": "artifacts\\edition2_simulation_v3\\banana__environment_only__xgboost.joblib"
+    },
+    "banana__mq_only__random_forest": {
+      "macro_f1": 0.5806767405029114,
+      "accuracy": 0.60625,
+      "spoiled_recall": 0.5333333333333333,
+      "log_loss": 0.7854495905892451,
+      "multiclass_brier": 0.47206766485424484,
+      "class_recall": {
+        "acceptable": 0.7215189873417721,
+        "warning": 0.47058823529411764,
+        "high_risk": 0.5333333333333333
+      },
+      "confusion_matrix_true_rows_pred_columns": [
+        [
+          57,
+          21,
+          1
+        ],
+        [
+          17,
+          24,
+          10
+        ],
+        [
+          1,
+          13,
+          16
+        ]
+      ],
+      "features": [
+        "MQ2_response_SIM",
+        "MQ3_response_SIM",
+        "MQ4_response_SIM",
+        "MQ5_response_SIM",
+        "MQ6_response_SIM",
+        "MQ7_response_SIM",
+        "MQ8_response_SIM",
+        "MQ9_response_SIM",
+        "MQ135_response_SIM"
+      ],
+      "test_lots": 20,
+      "test_rows": 160,
+      "model": "artifacts\\edition2_simulation_v3\\banana__mq_only__random_forest.joblib"
+    },
+    "banana__mq_only__xgboost": {
+      "macro_f1": 0.5570427204698304,
+      "accuracy": 0.5875,
+      "spoiled_recall": 0.43333333333333335,
+      "log_loss": 0.7967533914249646,
+      "multiclass_brier": 0.49489634980384933,
+      "class_recall": {
+        "acceptable": 0.6962025316455697,
+        "warning": 0.5098039215686274,
+        "high_risk": 0.43333333333333335
+      },
+      "confusion_matrix_true_rows_pred_columns": [
+        [
+          55,
+          23,
+          1
+        ],
+        [
+          17,
+          26,
+          8
+        ],
+        [
+          2,
+          15,
+          13
+        ]
+      ],
+      "features": [
+        "MQ2_response_SIM",
+        "MQ3_response_SIM",
+        "MQ4_response_SIM",
+        "MQ5_response_SIM",
+        "MQ6_response_SIM",
+        "MQ7_response_SIM",
+        "MQ8_response_SIM",
+        "MQ9_response_SIM",
+        "MQ135_response_SIM"
+      ],
+      "test_lots": 20,
+      "test_rows": 160,
+      "model": "artifacts\\edition2_simulation_v3\\banana__mq_only__xgboost.joblib"
+    },
+    "banana__combined__random_forest": {
+      "macro_f1": 0.6866290018832392,
+      "accuracy": 0.7,
+      "spoiled_recall": 0.6333333333333333,
+      "log_loss": 0.6135302249989859,
+      "multiclass_brier": 0.37076533838699044,
+      "class_recall": {
+        "acceptable": 0.7341772151898734,
+        "warning": 0.6862745098039216,
+        "high_risk": 0.6333333333333333
+      },
+      "confusion_matrix_true_rows_pred_columns": [
+        [
+          58,
+          21,
+          0
+        ],
+        [
+          8,
+          35,
+          8
+        ],
+        [
+          0,
+          11,
+          19
+        ]
+      ],
+      "features": [
+        "storage_age_days_SIM",
+        "temperature_C_SIM",
+        "relative_humidity_pct_SIM",
+        "MQ2_response_SIM",
+        "MQ3_response_SIM",
+        "MQ4_response_SIM",
+        "MQ5_response_SIM",
+        "MQ6_response_SIM",
+        "MQ7_response_SIM",
+        "MQ8_response_SIM",
+        "MQ9_response_SIM",
+        "MQ135_response_SIM"
+      ],
+      "test_lots": 20,
+      "test_rows": 160,
+      "model": "artifacts\\edition2_simulation_v3\\banana__combined__random_forest.joblib"
+    },
+    "banana__combined__xgboost": {
+      "macro_f1": 0.7452369705558178,
+      "accuracy": 0.75,
+      "spoiled_recall": 0.7333333333333333,
+      "log_loss": 0.5777522452219699,
+      "multiclass_brier": 0.36490204776252366,
+      "class_recall": {
+        "acceptable": 0.759493670886076,
+        "warning": 0.7450980392156863,
+        "high_risk": 0.7333333333333333
+      },
+      "confusion_matrix_true_rows_pred_columns": [
+        [
+          60,
+          19,
+          0
+        ],
+        [
+          7,
+          38,
+          6
+        ],
+        [
+          0,
+          8,
+          22
+        ]
+      ],
+      "features": [
+        "storage_age_days_SIM",
+        "temperature_C_SIM",
+        "relative_humidity_pct_SIM",
+        "MQ2_response_SIM",
+        "MQ3_response_SIM",
+        "MQ4_response_SIM",
+        "MQ5_response_SIM",
+        "MQ6_response_SIM",
+        "MQ7_response_SIM",
+        "MQ8_response_SIM",
+        "MQ9_response_SIM",
+        "MQ135_response_SIM"
+      ],
+      "test_lots": 20,
+      "test_rows": 160,
+      "model": "artifacts\\edition2_simulation_v3\\banana__combined__xgboost.joblib"
+    }
+  },
+  "crops": {
+    "tomato": {
+      "rows": 800,
+      "lots": 100,
+      "train_lots": 80,
+      "test_lots": 20,
+      "class_counts": {
+        "acceptable": 393,
+        "warning": 271,
+        "high_risk": 136
+      },
+      "mq_source_files_used_as_session_scale_anchors": [
+        "Tomato D1",
+        "Tomato D2",
+        "Tomato D3",
+        "Tomato D4",
+        "tomato D5"
+      ],
+      "csv": "data\\dataset_edition_2\\tomato\\simulated_v3\\tomato_source_informed_3state_SIMULATED.csv",
+      "models": {
+        "environment_only__random_forest": {
+          "macro_f1": 0.7571399639508273,
+          "accuracy": 0.78125,
+          "spoiled_recall": 0.7777777777777778,
+          "log_loss": 0.5376896812218952,
+          "multiclass_brier": 0.3180572462082915,
+          "class_recall": {
+            "acceptable": 0.8148148148148148,
+            "warning": 0.7307692307692307,
+            "high_risk": 0.7777777777777778
+          },
+          "confusion_matrix_true_rows_pred_columns": [
+            [
+              66,
+              13,
+              2
+            ],
+            [
+              4,
+              38,
+              10
+            ],
+            [
+              0,
+              6,
+              21
+            ]
+          ],
+          "features": [
+            "storage_age_days_SIM",
+            "temperature_C_SIM",
+            "relative_humidity_pct_SIM"
+          ],
+          "test_lots": 20,
+          "test_rows": 160,
+          "model": "artifacts\\edition2_simulation_v3\\tomato__environment_only__random_forest.joblib"
+        },
+        "environment_only__xgboost": {
+          "macro_f1": 0.7655763290171893,
+          "accuracy": 0.79375,
+          "spoiled_recall": 0.7037037037037037,
+          "log_loss": 0.5075254387955209,
+          "multiclass_brier": 0.3065408578707439,
+          "class_recall": {
+            "acceptable": 0.8518518518518519,
+            "warning": 0.75,
+            "high_risk": 0.7037037037037037
+          },
+          "confusion_matrix_true_rows_pred_columns": [
+            [
+              69,
+              12,
+              0
+            ],
+            [
+              5,
+              39,
+              8
+            ],
+            [
+              0,
+              8,
+              19
+            ]
+          ],
+          "features": [
+            "storage_age_days_SIM",
+            "temperature_C_SIM",
+            "relative_humidity_pct_SIM"
+          ],
+          "test_lots": 20,
+          "test_rows": 160,
+          "model": "artifacts\\edition2_simulation_v3\\tomato__environment_only__xgboost.joblib"
+        },
+        "mq_only__random_forest": {
+          "macro_f1": 0.564585511930792,
+          "accuracy": 0.6,
+          "spoiled_recall": 0.7037037037037037,
+          "log_loss": 0.7665365399911913,
+          "multiclass_brier": 0.47207308179950347,
+          "class_recall": {
+            "acceptable": 0.7283950617283951,
+            "warning": 0.34615384615384615,
+            "high_risk": 0.7037037037037037
+          },
+          "confusion_matrix_true_rows_pred_columns": [
+            [
+              59,
+              18,
+              4
+            ],
+            [
+              17,
+              18,
+              17
+            ],
+            [
+              0,
+              8,
+              19
+            ]
+          ],
+          "features": [
+            "MQ2_response_SIM",
+            "MQ3_response_SIM",
+            "MQ4_response_SIM",
+            "MQ5_response_SIM",
+            "MQ6_response_SIM",
+            "MQ7_response_SIM",
+            "MQ8_response_SIM",
+            "MQ9_response_SIM",
+            "MQ135_response_SIM"
+          ],
+          "test_lots": 20,
+          "test_rows": 160,
+          "model": "artifacts\\edition2_simulation_v3\\tomato__mq_only__random_forest.joblib"
+        },
+        "mq_only__xgboost": {
+          "macro_f1": 0.6004144004144004,
+          "accuracy": 0.6375,
+          "spoiled_recall": 0.7407407407407407,
+          "log_loss": 0.775393256664231,
+          "multiclass_brier": 0.47424683727671846,
+          "class_recall": {
+            "acceptable": 0.7777777777777778,
+            "warning": 0.36538461538461536,
+            "high_risk": 0.7407407407407407
+          },
+          "confusion_matrix_true_rows_pred_columns": [
+            [
+              63,
+              14,
+              4
+            ],
+            [
+              19,
+              19,
+              14
+            ],
+            [
+              2,
+              5,
+              20
+            ]
+          ],
+          "features": [
+            "MQ2_response_SIM",
+            "MQ3_response_SIM",
+            "MQ4_response_SIM",
+            "MQ5_response_SIM",
+            "MQ6_response_SIM",
+            "MQ7_response_SIM",
+            "MQ8_response_SIM",
+            "MQ9_response_SIM",
+            "MQ135_response_SIM"
+          ],
+          "test_lots": 20,
+          "test_rows": 160,
+          "model": "artifacts\\edition2_simulation_v3\\tomato__mq_only__xgboost.joblib"
+        },
+        "combined__random_forest": {
+          "macro_f1": 0.7873721815770334,
+          "accuracy": 0.825,
+          "spoiled_recall": 0.6296296296296297,
+          "log_loss": 0.5463254309854403,
+          "multiclass_brier": 0.3181441896267352,
+          "class_recall": {
+            "acceptable": 0.9012345679012346,
+            "warning": 0.8076923076923077,
+            "high_risk": 0.6296296296296297
+          },
+          "confusion_matrix_true_rows_pred_columns": [
+            [
+              73,
+              8,
+              0
+            ],
+            [
+              5,
+              42,
+              5
+            ],
+            [
+              0,
+              10,
+              17
+            ]
+          ],
+          "features": [
+            "storage_age_days_SIM",
+            "temperature_C_SIM",
+            "relative_humidity_pct_SIM",
+            "MQ2_response_SIM",
+            "MQ3_response_SIM",
+            "MQ4_response_SIM",
+            "MQ5_response_SIM",
+            "MQ6_response_SIM",
+            "MQ7_response_SIM",
+            "MQ8_response_SIM",
+            "MQ9_response_SIM",
+            "MQ135_response_SIM"
+          ],
+          "test_lots": 20,
+          "test_rows": 160,
+          "model": "artifacts\\edition2_simulation_v3\\tomato__combined__random_forest.joblib"
+        },
+        "combined__xgboost": {
+          "macro_f1": 0.7458977719528178,
+          "accuracy": 0.76875,
+          "spoiled_recall": 0.6666666666666666,
+          "log_loss": 0.4684117171295985,
+          "multiclass_brier": 0.29185608545554137,
+          "class_recall": {
+            "acceptable": 0.8518518518518519,
+            "warning": 0.6923076923076923,
+            "high_risk": 0.6666666666666666
+          },
+          "confusion_matrix_true_rows_pred_columns": [
+            [
+              69,
+              12,
+              0
+            ],
+            [
+              11,
+              36,
+              5
+            ],
+            [
+              0,
+              9,
+              18
+            ]
+          ],
+          "features": [
+            "storage_age_days_SIM",
+            "temperature_C_SIM",
+            "relative_humidity_pct_SIM",
+            "MQ2_response_SIM",
+            "MQ3_response_SIM",
+            "MQ4_response_SIM",
+            "MQ5_response_SIM",
+            "MQ6_response_SIM",
+            "MQ7_response_SIM",
+            "MQ8_response_SIM",
+            "MQ9_response_SIM",
+            "MQ135_response_SIM"
+          ],
+          "test_lots": 20,
+          "test_rows": 160,
+          "model": "artifacts\\edition2_simulation_v3\\tomato__combined__xgboost.joblib"
+        }
+      }
+    },
+    "potato": {
+      "rows": 800,
+      "lots": 100,
+      "train_lots": 80,
+      "test_lots": 20,
+      "class_counts": {
+        "acceptable": 380,
+        "warning": 286,
+        "high_risk": 134
+      },
+      "mq_source_files_used_as_session_scale_anchors": [
+        "Tomato D1",
+        "Tomato D2",
+        "Tomato D3",
+        "Tomato D4",
+        "tomato D5",
+        "Banana D1",
+        "Banana D2",
+        "Banana D3",
+        "Banana D4",
+        "Banana D5"
+      ],
+      "csv": "data\\dataset_edition_2\\potato\\simulated_v3\\potato_source_informed_3state_SIMULATED.csv",
+      "models": {
+        "environment_only__random_forest": {
+          "macro_f1": 0.6349800560835885,
+          "accuracy": 0.68125,
+          "spoiled_recall": 0.48,
+          "log_loss": 0.6863722631876018,
+          "multiclass_brier": 0.41510463779681295,
+          "class_recall": {
+            "acceptable": 0.8266666666666667,
+            "warning": 0.5833333333333334,
+            "high_risk": 0.48
+          },
+          "confusion_matrix_true_rows_pred_columns": [
+            [
+              62,
+              13,
+              0
+            ],
+            [
+              15,
+              35,
+              10
+            ],
+            [
+              0,
+              13,
+              12
+            ]
+          ],
+          "features": [
+            "storage_age_days_SIM",
+            "temperature_C_SIM",
+            "relative_humidity_pct_SIM"
+          ],
+          "test_lots": 20,
+          "test_rows": 160,
+          "model": "artifacts\\edition2_simulation_v3\\potato__environment_only__random_forest.joblib"
+        },
+        "environment_only__xgboost": {
+          "macro_f1": 0.6544733740490732,
+          "accuracy": 0.7,
+          "spoiled_recall": 0.48,
+          "log_loss": 0.7007934297169418,
+          "multiclass_brier": 0.42299715223891077,
+          "class_recall": {
+            "acceptable": 0.84,
+            "warning": 0.6166666666666667,
+            "high_risk": 0.48
+          },
+          "confusion_matrix_true_rows_pred_columns": [
+            [
+              63,
+              12,
+              0
+            ],
+            [
+              15,
+              37,
+              8
+            ],
+            [
+              0,
+              13,
+              12
+            ]
+          ],
+          "features": [
+            "storage_age_days_SIM",
+            "temperature_C_SIM",
+            "relative_humidity_pct_SIM"
+          ],
+          "test_lots": 20,
+          "test_rows": 160,
+          "model": "artifacts\\edition2_simulation_v3\\potato__environment_only__xgboost.joblib"
+        },
+        "mq_only__random_forest": {
+          "macro_f1": 0.5156776068626097,
+          "accuracy": 0.55625,
+          "spoiled_recall": 0.4,
+          "log_loss": 0.8910903751376477,
+          "multiclass_brier": 0.5492920544863178,
+          "class_recall": {
+            "acceptable": 0.6133333333333333,
+            "warning": 0.55,
+            "high_risk": 0.4
+          },
+          "confusion_matrix_true_rows_pred_columns": [
+            [
+              46,
+              21,
+              8
+            ],
+            [
+              13,
+              33,
+              14
+            ],
+            [
+              2,
+              13,
+              10
+            ]
+          ],
+          "features": [
+            "MQ2_response_SIM",
+            "MQ3_response_SIM",
+            "MQ4_response_SIM",
+            "MQ5_response_SIM",
+            "MQ6_response_SIM",
+            "MQ7_response_SIM",
+            "MQ8_response_SIM",
+            "MQ9_response_SIM",
+            "MQ135_response_SIM"
+          ],
+          "test_lots": 20,
+          "test_rows": 160,
+          "model": "artifacts\\edition2_simulation_v3\\potato__mq_only__random_forest.joblib"
+        },
+        "mq_only__xgboost": {
+          "macro_f1": 0.49379541842983904,
+          "accuracy": 0.54375,
+          "spoiled_recall": 0.32,
+          "log_loss": 0.9460670002770417,
+          "multiclass_brier": 0.5926521939624217,
+          "class_recall": {
+            "acceptable": 0.64,
+            "warning": 0.5166666666666667,
+            "high_risk": 0.32
+          },
+          "confusion_matrix_true_rows_pred_columns": [
+            [
+              48,
+              22,
+              5
+            ],
+            [
+              18,
+              31,
+              11
+            ],
+            [
+              3,
+              14,
+              8
+            ]
+          ],
+          "features": [
+            "MQ2_response_SIM",
+            "MQ3_response_SIM",
+            "MQ4_response_SIM",
+            "MQ5_response_SIM",
+            "MQ6_response_SIM",
+            "MQ7_response_SIM",
+            "MQ8_response_SIM",
+            "MQ9_response_SIM",
+            "MQ135_response_SIM"
+          ],
+          "test_lots": 20,
+          "test_rows": 160,
+          "model": "artifacts\\edition2_simulation_v3\\potato__mq_only__xgboost.joblib"
+        },
+        "combined__random_forest": {
+          "macro_f1": 0.6141972491388547,
+          "accuracy": 0.66875,
+          "spoiled_recall": 0.4,
+          "log_loss": 0.6839319635933488,
+          "multiclass_brier": 0.41985849867202907,
+          "class_recall": {
+            "acceptable": 0.8,
+            "warning": 0.6166666666666667,
+            "high_risk": 0.4
+          },
+          "confusion_matrix_true_rows_pred_columns": [
+            [
+              60,
+              15,
+              0
+            ],
+            [
+              14,
+              37,
+              9
+            ],
+            [
+              0,
+              15,
+              10
+            ]
+          ],
+          "features": [
+            "storage_age_days_SIM",
+            "temperature_C_SIM",
+            "relative_humidity_pct_SIM",
+            "MQ2_response_SIM",
+            "MQ3_response_SIM",
+            "MQ4_response_SIM",
+            "MQ5_response_SIM",
+            "MQ6_response_SIM",
+            "MQ7_response_SIM",
+            "MQ8_response_SIM",
+            "MQ9_response_SIM",
+            "MQ135_response_SIM"
+          ],
+          "test_lots": 20,
+          "test_rows": 160,
+          "model": "artifacts\\edition2_simulation_v3\\potato__combined__random_forest.joblib"
+        },
+        "combined__xgboost": {
+          "macro_f1": 0.5799873835908641,
+          "accuracy": 0.65,
+          "spoiled_recall": 0.32,
+          "log_loss": 0.7122652444585782,
+          "multiclass_brier": 0.444669128383532,
+          "class_recall": {
+            "acceptable": 0.8,
+            "warning": 0.6,
+            "high_risk": 0.32
+          },
+          "confusion_matrix_true_rows_pred_columns": [
+            [
+              60,
+              15,
+              0
+            ],
+            [
+              14,
+              36,
+              10
+            ],
+            [
+              0,
+              17,
+              8
+            ]
+          ],
+          "features": [
+            "storage_age_days_SIM",
+            "temperature_C_SIM",
+            "relative_humidity_pct_SIM",
+            "MQ2_response_SIM",
+            "MQ3_response_SIM",
+            "MQ4_response_SIM",
+            "MQ5_response_SIM",
+            "MQ6_response_SIM",
+            "MQ7_response_SIM",
+            "MQ8_response_SIM",
+            "MQ9_response_SIM",
+            "MQ135_response_SIM"
+          ],
+          "test_lots": 20,
+          "test_rows": 160,
+          "model": "artifacts\\edition2_simulation_v3\\potato__combined__xgboost.joblib"
+        }
+      }
+    },
+    "banana": {
+      "rows": 800,
+      "lots": 100,
+      "train_lots": 80,
+      "test_lots": 20,
+      "class_counts": {
+        "acceptable": 368,
+        "warning": 287,
+        "high_risk": 145
+      },
+      "mq_source_files_used_as_session_scale_anchors": [
+        "Banana D1",
+        "Banana D2",
+        "Banana D3",
+        "Banana D4",
+        "Banana D5"
+      ],
+      "csv": "data\\dataset_edition_2\\banana\\simulated_v3\\banana_source_informed_3state_SIMULATED.csv",
+      "models": {
+        "environment_only__random_forest": {
+          "macro_f1": 0.7110928287398876,
+          "accuracy": 0.7375,
+          "spoiled_recall": 0.5333333333333333,
+          "log_loss": 0.5261031213011729,
+          "multiclass_brier": 0.3289821300797232,
+          "class_recall": {
+            "acceptable": 0.759493670886076,
+            "warning": 0.8235294117647058,
+            "high_risk": 0.5333333333333333
+          },
+          "confusion_matrix_true_rows_pred_columns": [
+            [
+              60,
+              19,
+              0
+            ],
+            [
+              4,
+              42,
+              5
+            ],
+            [
+              0,
+              14,
+              16
+            ]
+          ],
+          "features": [
+            "storage_age_days_SIM",
+            "temperature_C_SIM",
+            "relative_humidity_pct_SIM"
+          ],
+          "test_lots": 20,
+          "test_rows": 160,
+          "model": "artifacts\\edition2_simulation_v3\\banana__environment_only__random_forest.joblib"
+        },
+        "environment_only__xgboost": {
+          "macro_f1": 0.6931258070969971,
+          "accuracy": 0.73125,
+          "spoiled_recall": 0.4666666666666667,
+          "log_loss": 0.5238370029094238,
+          "multiclass_brier": 0.3296192890800388,
+          "class_recall": {
+            "acceptable": 0.7974683544303798,
+            "warning": 0.7843137254901961,
+            "high_risk": 0.4666666666666667
+          },
+          "confusion_matrix_true_rows_pred_columns": [
+            [
+              63,
+              16,
+              0
+            ],
+            [
+              7,
+              40,
+              4
+            ],
+            [
+              0,
+              16,
+              14
+            ]
+          ],
+          "features": [
+            "storage_age_days_SIM",
+            "temperature_C_SIM",
+            "relative_humidity_pct_SIM"
+          ],
+          "test_lots": 20,
+          "test_rows": 160,
+          "model": "artifacts\\edition2_simulation_v3\\banana__environment_only__xgboost.joblib"
+        },
+        "mq_only__random_forest": {
+          "macro_f1": 0.5806767405029114,
+          "accuracy": 0.60625,
+          "spoiled_recall": 0.5333333333333333,
+          "log_loss": 0.7854495905892451,
+          "multiclass_brier": 0.47206766485424484,
+          "class_recall": {
+            "acceptable": 0.7215189873417721,
+            "warning": 0.47058823529411764,
+            "high_risk": 0.5333333333333333
+          },
+          "confusion_matrix_true_rows_pred_columns": [
+            [
+              57,
+              21,
+              1
+            ],
+            [
+              17,
+              24,
+              10
+            ],
+            [
+              1,
+              13,
+              16
+            ]
+          ],
+          "features": [
+            "MQ2_response_SIM",
+            "MQ3_response_SIM",
+            "MQ4_response_SIM",
+            "MQ5_response_SIM",
+            "MQ6_response_SIM",
+            "MQ7_response_SIM",
+            "MQ8_response_SIM",
+            "MQ9_response_SIM",
+            "MQ135_response_SIM"
+          ],
+          "test_lots": 20,
+          "test_rows": 160,
+          "model": "artifacts\\edition2_simulation_v3\\banana__mq_only__random_forest.joblib"
+        },
+        "mq_only__xgboost": {
+          "macro_f1": 0.5570427204698304,
+          "accuracy": 0.5875,
+          "spoiled_recall": 0.43333333333333335,
+          "log_loss": 0.7967533914249646,
+          "multiclass_brier": 0.49489634980384933,
+          "class_recall": {
+            "acceptable": 0.6962025316455697,
+            "warning": 0.5098039215686274,
+            "high_risk": 0.43333333333333335
+          },
+          "confusion_matrix_true_rows_pred_columns": [
+            [
+              55,
+              23,
+              1
+            ],
+            [
+              17,
+              26,
+              8
+            ],
+            [
+              2,
+              15,
+              13
+            ]
+          ],
+          "features": [
+            "MQ2_response_SIM",
+            "MQ3_response_SIM",
+            "MQ4_response_SIM",
+            "MQ5_response_SIM",
+            "MQ6_response_SIM",
+            "MQ7_response_SIM",
+            "MQ8_response_SIM",
+            "MQ9_response_SIM",
+            "MQ135_response_SIM"
+          ],
+          "test_lots": 20,
+          "test_rows": 160,
+          "model": "artifacts\\edition2_simulation_v3\\banana__mq_only__xgboost.joblib"
+        },
+        "combined__random_forest": {
+          "macro_f1": 0.6866290018832392,
+          "accuracy": 0.7,
+          "spoiled_recall": 0.6333333333333333,
+          "log_loss": 0.6135302249989859,
+          "multiclass_brier": 0.37076533838699044,
+          "class_recall": {
+            "acceptable": 0.7341772151898734,
+            "warning": 0.6862745098039216,
+            "high_risk": 0.6333333333333333
+          },
+          "confusion_matrix_true_rows_pred_columns": [
+            [
+              58,
+              21,
+              0
+            ],
+            [
+              8,
+              35,
+              8
+            ],
+            [
+              0,
+              11,
+              19
+            ]
+          ],
+          "features": [
+            "storage_age_days_SIM",
+            "temperature_C_SIM",
+            "relative_humidity_pct_SIM",
+            "MQ2_response_SIM",
+            "MQ3_response_SIM",
+            "MQ4_response_SIM",
+            "MQ5_response_SIM",
+            "MQ6_response_SIM",
+            "MQ7_response_SIM",
+            "MQ8_response_SIM",
+            "MQ9_response_SIM",
+            "MQ135_response_SIM"
+          ],
+          "test_lots": 20,
+          "test_rows": 160,
+          "model": "artifacts\\edition2_simulation_v3\\banana__combined__random_forest.joblib"
+        },
+        "combined__xgboost": {
+          "macro_f1": 0.7452369705558178,
+          "accuracy": 0.75,
+          "spoiled_recall": 0.7333333333333333,
+          "log_loss": 0.5777522452219699,
+          "multiclass_brier": 0.36490204776252366,
+          "class_recall": {
+            "acceptable": 0.759493670886076,
+            "warning": 0.7450980392156863,
+            "high_risk": 0.7333333333333333
+          },
+          "confusion_matrix_true_rows_pred_columns": [
+            [
+              60,
+              19,
+              0
+            ],
+            [
+              7,
+              38,
+              6
+            ],
+            [
+              0,
+              8,
+              22
+            ]
+          ],
+          "features": [
+            "storage_age_days_SIM",
+            "temperature_C_SIM",
+            "relative_humidity_pct_SIM",
+            "MQ2_response_SIM",
+            "MQ3_response_SIM",
+            "MQ4_response_SIM",
+            "MQ5_response_SIM",
+            "MQ6_response_SIM",
+            "MQ7_response_SIM",
+            "MQ8_response_SIM",
+            "MQ9_response_SIM",
+            "MQ135_response_SIM"
+          ],
+          "test_lots": 20,
+          "test_rows": 160,
+          "model": "artifacts\\edition2_simulation_v3\\banana__combined__xgboost.joblib"
+        }
+      }
+    }
+  }
+}

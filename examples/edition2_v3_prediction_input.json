@@ -1,0 +1,17 @@
+{
+  "crop": "tomato",
+  "storage_age_days_SIM": 0.0,
+  "temperature_C_SIM": 9.96,
+  "relative_humidity_pct_SIM": 96.39,
+  "MQ2_response_SIM": 82.66,
+  "MQ3_response_SIM": 377.98,
+  "MQ4_response_SIM": 90.44,
+  "MQ5_response_SIM": 129.55,
+  "MQ6_response_SIM": 108.76,
+  "MQ7_response_SIM": 78.0,
+  "MQ8_response_SIM": 250.0,
+  "MQ9_response_SIM": 90.45,
+  "MQ135_response_SIM": 1245.52,
+  "model": "xgboost",
+  "feature_set": "combined"
+}
