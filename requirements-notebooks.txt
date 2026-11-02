@@ -1,0 +1,4 @@
+-r requirements.txt
+matplotlib>=3.8,<4
+notebook>=7,<8
+ipykernel>=6.29,<8
